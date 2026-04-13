@@ -53,22 +53,31 @@ const VIDEO_FADE_END_PROGRESS = 0.6;
 const SECOND_VIDEO_FADE_IN_START = VIDEO_FADE_END_PROGRESS;
 const SECOND_VIDEO_FADE_IN_END = 0.72;
 
-/** Tras el fade-in, el vídeo crece en horizontal hasta ocupar todo el viewport. */
+/** Tras el fade-in, la máscara (gradiente) revela el vídeo ya a ancho completo. */
 const SECOND_VIDEO_EXPAND_START = SECOND_VIDEO_FADE_IN_END;
 const SECOND_VIDEO_EXPAND_END = 0.96;
 
-/** Antes del ancho completo: el bloque de texto hace fade out (progreso de sección). */
-const MANIFESTO_TEXT_FADE_OUT_START = 0.78;
-const MANIFESTO_TEXT_FADE_OUT_END = 0.86;
+/** Transición suave del borde de la máscara (% del ancho del contenedor). */
+const ESTAR_VIDEO_MASK_FEATHER_PCT = 20;
 
-/** Overlay con botón play (mismo patrón que `CinematicSection`). */
-const MANIFESTO_PLAY_OVERLAY_START = 0.82;
-const MANIFESTO_PLAY_OVERLAY_END = 0.9;
+/** Tras la 2.ª definición: más recorrido de scroll antes del fade-out del bloque de texto. */
+const MANIFESTO_TEXT_FADE_OUT_START = 0.84;
+const MANIFESTO_TEXT_FADE_OUT_END = 0.92;
+
+/** Overlay con botón play: entra cuando el texto ya terminó de desvanecerse. */
+const MANIFESTO_PLAY_OVERLAY_START = 0.92;
+const MANIFESTO_PLAY_OVERLAY_END = 0.985;
 
 /** Por debajo de esto se resetea el overlay / audio del «estar acá». */
 const MANIFESTO_PLAY_RESET_PROGRESS = 0.74;
 
 const MANIFESTO_SCROLL_HEIGHT_VH = 425;
+
+/** Anticipar reproducción ~1s antes del fade-in (mapeado scroll ≈ px/s sobre el tramo del manifiesto). */
+const ESTAR_VIDEO_PLAY_PREROLL_MS = 1000;
+const ESTAR_VIDEO_ASSUMED_SCROLL_PX_PER_SEC = 480;
+/** Tope de adelanto en progreso 0–1 para no solaparse con el tambor. */
+const ESTAR_VIDEO_PLAY_LEAD_PROGRESS_CAP = 0.055;
 
 const SECOND_VIDEO_SRC = "/video/estar-aca-corto.mov";
 
@@ -83,6 +92,26 @@ export function ManifestoSection() {
   const [youtubeOpen, setYoutubeOpen] = useState(false);
   /** Alineado con `w-[58%] md:w-[60%]` de la columna del tambor. */
   const estarVideoNarrowPctRef = useRef(58);
+  /** ~px recorridos en el eje de scroll para progress 0→1 (offset start/end del manifiesto). */
+  const manifestoScrollRangePxRef = useRef(8000);
+
+  useLayoutEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof window === "undefined") return;
+    const syncRange = () => {
+      const h = el.offsetHeight;
+      const vh = window.innerHeight;
+      manifestoScrollRangePxRef.current = Math.max(400, h - vh);
+    };
+    syncRange();
+    const ro = new ResizeObserver(syncRange);
+    ro.observe(el);
+    window.addEventListener("resize", syncRange);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", syncRange);
+    };
+  }, []);
 
   useLayoutEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -129,16 +158,37 @@ export function ManifestoSection() {
     { clamp: true },
   );
 
-  /** Misma huella inicial que la columna del tambor (58% / 60% md), luego 100% del contenedor. */
-  const estarVideoWidth = useTransform(scrollYProgress, (p) => {
+  /**
+   * Vídeo a ancho completo; el scroll desplaza un borde suave (mask-image en lugar de clip-path recto).
+   */
+  const estarVideoMaskGradient = useTransform(scrollYProgress, (p) => {
     const narrowPct = estarVideoNarrowPctRef.current;
-    if (p < SECOND_VIDEO_EXPAND_START) return `${narrowPct}%`;
-    if (prefersReducedMotion === true) return "100%";
-    if (p >= SECOND_VIDEO_EXPAND_END) return "100%";
+    const leftInsetMax = 100 - narrowPct;
+    const F = ESTAR_VIDEO_MASK_FEATHER_PCT;
+
+    const softMask = (edgePct: number) => {
+      if (edgePct <= 0.25) {
+        return "linear-gradient(to right, #000 0%, #000 100%)";
+      }
+      const fadeStart = Math.max(0, edgePct - F);
+      const fadeEnd = Math.min(100, edgePct + F * 0.4);
+      return `linear-gradient(to right, transparent 0%, transparent ${fadeStart}%, #000 ${fadeEnd}%, #000 100%)`;
+    };
+
+    if (prefersReducedMotion === true) {
+      return "none";
+    }
+    if (p < SECOND_VIDEO_EXPAND_START) {
+      return softMask(leftInsetMax);
+    }
+    if (p >= SECOND_VIDEO_EXPAND_END) {
+      return "none";
+    }
     const t =
       (p - SECOND_VIDEO_EXPAND_START) /
       (SECOND_VIDEO_EXPAND_END - SECOND_VIDEO_EXPAND_START);
-    return `${narrowPct + (100 - narrowPct) * t}%`;
+    const edge = leftInsetMax * (1 - t);
+    return softMask(edge);
   });
 
   const textBlockScrollOpacity = useTransform(scrollYProgress, (p) => {
@@ -203,7 +253,20 @@ export function ManifestoSection() {
     }
     setShowDefinition2(progress >= SECOND_VIDEO_FADE_IN_END - 0.04);
 
-    if (progress < SECOND_VIDEO_FADE_IN_START + 0.02) {
+    const rangePx = manifestoScrollRangePxRef.current;
+    const leadProgress = Math.min(
+      ESTAR_VIDEO_PLAY_LEAD_PROGRESS_CAP,
+      (ESTAR_VIDEO_PLAY_PREROLL_MS / 1000) *
+        ESTAR_VIDEO_ASSUMED_SCROLL_PX_PER_SEC /
+        rangePx,
+    );
+    const estarPlayProgress = Math.max(
+      VIDEO_FADE_START_PROGRESS + 0.04,
+      SECOND_VIDEO_FADE_IN_START - leadProgress,
+    );
+    const estarHysteresis = Math.max(0.01, leadProgress * 0.35);
+
+    if (progress < estarPlayProgress - estarHysteresis) {
       estarVideoStartedRef.current = false;
       const v = estarVideoRef.current;
       if (v) {
@@ -212,13 +275,13 @@ export function ManifestoSection() {
       }
       return;
     }
-    if (progress < SECOND_VIDEO_FADE_IN_END - 0.02) return;
-    if (estarVideoStartedRef.current) return;
-    const v = estarVideoRef.current;
-    if (!v) return;
-    estarVideoStartedRef.current = true;
-    v.muted = true;
-    void v.play().catch(() => {});
+    if (progress >= estarPlayProgress && !estarVideoStartedRef.current) {
+      const v = estarVideoRef.current;
+      if (!v) return;
+      estarVideoStartedRef.current = true;
+      v.muted = true;
+      void v.play().catch(() => {});
+    }
   }, []);
 
   const handleManifestoPlayClick = useCallback(() => {
@@ -284,7 +347,7 @@ export function ManifestoSection() {
         >
           <div className="pointer-events-none absolute inset-0">
             <motion.div
-              className="absolute right-0 top-0 h-full w-[58%] will-change-transform md:w-[60%]"
+              className="absolute right-0 top-0 h-full w-[58%] overflow-hidden bg-[#0A0A0A] will-change-transform md:w-[60%]"
               style={{ opacity: tamborVideoOpacity, y: videoParallaxY }}
             >
               <video
@@ -292,7 +355,7 @@ export function ManifestoSection() {
                 loop
                 muted
                 playsInline
-                className="h-full w-full scale-x-[-1] object-cover"
+                className="pointer-events-none block h-full w-full bg-[#0A0A0A] object-cover object-center [transform:translateZ(0)_scale3d(-1.04,1.04,1)]"
               >
                 <source src="/video/manifiesto.mov" type="video/quicktime" />
                 <source src="/video/manifiesto.mov" type="video/mp4" />
@@ -301,23 +364,34 @@ export function ManifestoSection() {
             </motion.div>
 
             <motion.div
-              className="absolute right-0 top-0 z-[11] h-full overflow-hidden will-change-[width]"
+              className="absolute inset-x-0 top-0 z-[11] h-full w-full overflow-hidden"
               style={{
-                width: estarVideoWidth,
                 opacity: estarVideoOpacity,
                 y: videoParallaxY,
               }}
             >
-              <video
-                ref={estarVideoRef}
-                className="h-full w-full object-cover"
-                src={SECOND_VIDEO_SRC}
-                muted
-                playsInline
-                loop
-                preload="metadata"
-              />
-              <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#0A0A0A] via-transparent to-transparent" />
+              <motion.div
+                className="relative h-full w-full will-change-[mask-image]"
+                style={{
+                  maskImage: estarVideoMaskGradient,
+                  WebkitMaskImage: estarVideoMaskGradient,
+                  maskSize: "100% 100%",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskSize: "100% 100%",
+                  WebkitMaskRepeat: "no-repeat",
+                }}
+              >
+                <video
+                  ref={estarVideoRef}
+                  className="pointer-events-none block h-full w-full object-cover object-center"
+                  src={SECOND_VIDEO_SRC}
+                  muted
+                  playsInline
+                  loop
+                  preload="metadata"
+                />
+                <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-[#0A0A0A] via-transparent to-transparent" />
+              </motion.div>
             </motion.div>
           </div>
 
@@ -392,14 +466,21 @@ export function ManifestoSection() {
             className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center px-4"
             style={{ opacity: playOverlayOpacity }}
           >
-            <button
-              type="button"
-              aria-label="Reproducir video desde el inicio"
-              onClick={handleManifestoPlayClick}
-              className="pointer-events-auto mt-4 flex h-[4.5rem] w-[4.5rem] cursor-pointer items-center justify-center rounded-full border-2 border-white/45 text-white/90 backdrop-blur-sm transition-colors hover:border-white/70 hover:text-white md:mt-6 md:h-24 md:w-24"
-            >
-              <Play className="ml-1 h-9 w-9 fill-current md:h-11 md:w-11" aria-hidden />
-            </button>
+            <div className="flex max-w-[min(100%,56rem)] flex-col items-center text-center">
+              <h2
+                className={`${ebGaramondMediumItalic.className} text-[clamp(2rem,6vw+1.25rem,100px)] leading-[0.95] tracking-tight text-white drop-shadow-md`}
+              >
+                Estar acá y estar ahora
+              </h2>
+              <button
+                type="button"
+                aria-label="Reproducir video desde el inicio"
+                onClick={handleManifestoPlayClick}
+                className="pointer-events-auto mt-6 flex h-[4.5rem] w-[4.5rem] cursor-pointer items-center justify-center rounded-full border-2 border-white/45 text-white/90 backdrop-blur-sm transition-colors hover:border-white/70 hover:text-white md:mt-8 md:h-24 md:w-24"
+              >
+                <Play className="ml-1 h-9 w-9 fill-current md:h-11 md:w-11" aria-hidden />
+              </button>
+            </div>
           </motion.div>
 
           <EstarAcaYoutubeEmbed open={youtubeOpen} onClose={handleYoutubeClose} />

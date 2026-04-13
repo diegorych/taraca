@@ -14,7 +14,7 @@ import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useIntroSequence } from "@/components/providers/IntroSequenceProvider";
 
-/** Parallax del cursor: logo y fondo en direcciones opuestas; fondo más suave para no destapar bordes. */
+/** Parallax del cursor: logo y capa Drexler en direcciones opuestas (Drexler usa los mismos px que el antiguo “bg”). */
 const LOGO_MOUSE_X_PX = 14;
 const LOGO_MOUSE_Y_PX = 11;
 const BG_MOUSE_X_PX = 5;
@@ -79,14 +79,7 @@ export const Hero = () => {
     offset: ["start start", "end start"],
   });
 
-  /**
-   * Parallax en Y por capa (mismo scroll 0→1, distintas magnitudes = profundidad).
-   * Fondo más lento; logo medio; decor con valores propios cada uno.
-   */
-  const heroImgY = useTransform(scrollYProgress, [0, 1], [0, -105]);
-  /** Curvatura sutil con el scroll: ligera inclinación 3D + esquinas que redondean un poco. */
-  const heroImgRotateX = useTransform(scrollYProgress, [0, 1], [0, 1.85]);
-  const heroImgBorderRadius = useTransform(scrollYProgress, [0, 1], [0, 12]);
+  /** Parallax scroll: solo logo y decor; fondo y Drexler fijos en scroll. */
   const logoY = useTransform(scrollYProgress, [0, 1], [0, -198]);
   const logoYWithMouse = useTransform(
     [logoY, logoMouseY],
@@ -103,11 +96,6 @@ export const Hero = () => {
   const decorLineasY = useTransform(scrollYProgress, [0, 1], [0, -248]);
   const decorAmarilloY = useTransform(scrollYProgress, [0, 1], [0, -492]);
   const decorCuadradoY = useTransform(scrollYProgress, [0, 1], [0, -312]);
-
-  const heroImgYWithMouse = useTransform(
-    [heroImgY, bgMouseY],
-    ([sy, my]) => Number(sy) + Number(my),
-  );
 
   useEffect(() => {
     setShowHeader(false);
@@ -132,35 +120,60 @@ export const Hero = () => {
         {/* Reproductor de música arriba en el centro */}
         <HeroMusicPlayer show={showDecor} />
 
-        {/* Foto Drexler: ventana exactamente 1× viewport (dvh); el hijo más alto + overflow recorta para parallax. */}
-        <div className="absolute inset-x-0 top-0 z-0 h-dvh w-full overflow-hidden [perspective:min(90rem,150vw)] [perspective-origin:50%_38%] md:[perspective-origin:50%_36%]">
+        {/* Fondo fijo + Drexler fijo al scroll; solo parallax del cursor en Drexler (opuesto al logo). */}
+        <div className="absolute inset-x-0 top-0 z-0 h-dvh w-full overflow-hidden">
           <motion.div
-            style={{
-              x: bgMouseX,
-              y: heroImgYWithMouse,
-              rotateX: heroImgRotateX,
-              borderRadius: heroImgBorderRadius,
-              transformOrigin: "50% 56%",
-            }}
-            className="absolute inset-x-0 -top-[7%] h-[114%] overflow-hidden will-change-transform [transform-style:preserve-3d] [backface-visibility:hidden]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: showBg ? 1 : 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="absolute inset-x-0 -top-[7%] h-[114%] overflow-hidden"
           >
+            <div className="absolute inset-0 origin-center scale-[1.06]">
+              <Image
+                src="/images/hero-bg.png"
+                alt=""
+                fill
+                priority
+                unoptimized
+                className="object-cover object-center md:object-[center_40%]"
+                sizes="100vw"
+                aria-hidden
+              />
+            </div>
+          </motion.div>
+
+          <div className="absolute inset-x-0 -top-[7%] h-[114%] overflow-hidden">
+            <motion.div
+              style={{
+                x: bgMouseX,
+                y: bgMouseY,
+              }}
+              className="absolute inset-0 will-change-transform"
+            >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: showBg ? 1 : 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="absolute inset-0 origin-center scale-[1.06] will-change-transform"
             >
-              <Image
-                src="/images/drexler-hero-v2.png"
-                alt="Jorge Drexler"
-                fill
-                priority
-                unoptimized
-                className="object-cover object-center md:object-[center_38%]"
-              />
+              <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-0 pt-[2vh] md:pt-[3vh]">
+                <div className="relative h-[min(98svh,2800px)] w-[min(100vw,1000px)] origin-bottom scale-[1.06] sm:h-[min(98svh,3000px)] sm:w-[min(100vw,1180px)] sm:scale-[1.08] md:h-[min(99svh,3200px)] md:w-[min(100vw,1420px)] md:scale-[1.1] lg:h-[min(99svh,3400px)] lg:w-[min(100vw,1640px)] lg:scale-[1.12] xl:w-[min(100vw,1840px)] xl:scale-[1.14]">
+                  <Image
+                    src="/images/hero-drexler-solo.png"
+                    alt="Jorge Drexler"
+                    fill
+                    priority
+                    unoptimized
+                    className="object-contain object-bottom"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1536px) 1640px, 1840px"
+                  />
+                </div>
+              </div>
             </motion.div>
-          </motion.div>
-          <div className="absolute inset-x-0 top-0 z-[1] h-dvh w-full bg-black/30 pointer-events-none" />
+            </motion.div>
+          </div>
+
+          <div className="absolute inset-x-0 top-0 z-[2] h-dvh w-full bg-black/30 pointer-events-none" />
         </div>
 
         {/* Logo Layer: parallax + escala (sin fade por scroll) */}

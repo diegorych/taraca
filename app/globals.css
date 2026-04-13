@@ -27,6 +27,36 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+/* Cursor personalizado: nunca mostrar el cursor del sistema (salvo texto editable). */
+html.use-custom-cursor,
+html.use-custom-cursor *,
+html.use-custom-cursor *::before,
+html.use-custom-cursor *::after,
+body.use-custom-cursor,
+body.use-custom-cursor *,
+body.use-custom-cursor *::before,
+body.use-custom-cursor *::after {
+  cursor: none !important;
+}
+
+html.use-custom-cursor input,
+html.use-custom-cursor textarea,
+html.use-custom-cursor select,
+html.use-custom-cursor [contenteditable="true"],
+html.use-custom-cursor [contenteditable="plaintext-only"],
+body.use-custom-cursor input,
+body.use-custom-cursor textarea,
+body.use-custom-cursor select,
+body.use-custom-cursor [contenteditable="true"],
+body.use-custom-cursor [contenteditable="plaintext-only"] {
+  cursor: text !important;
+}
+
+html.use-custom-cursor dialog::backdrop,
+body.use-custom-cursor dialog::backdrop {
+  cursor: none !important;
+}
+
 /* Film Grain / Noise Overlay */
 body::before {
   content: "";

@@ -40,6 +40,12 @@ const legalText =
 
 const tracklistViewport = { once: true, amount: 0.12 } as const;
 
+/**
+ * Progreso de scroll de la sección (offset start start → end start) a partir del cual
+ * el panel deja el ancho viewport y se estrecha. Más bajo = el efecto empieza antes.
+ */
+const TRACKLIST_EXIT_SHRINK_PROGRESS_START = 0.52;
+
 /** Cada fila se revela al hacer scroll (no todas a la vez). */
 const trackRowViewport = {
   once: true,
@@ -291,6 +297,8 @@ export function TracklistSection() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const baseWidthPx = useMotionValue(0);
   const bleedLeftPx = useMotionValue(0);
+  /** Sin medidas, width=100vw + margin=0 desplaza el panel a la derecha (hueco a la izquierda). */
+  const [panelMetricsReady, setPanelMetricsReady] = useState(false);
 
   useLayoutEffect(() => {
     const el = wrapperRef.current;
@@ -300,6 +308,9 @@ export function TracklistSection() {
       const r = el.getBoundingClientRect();
       baseWidthPx.set(r.width);
       bleedLeftPx.set(r.left);
+      if (r.width > 0) {
+        setPanelMetricsReady(true);
+      }
     };
 
     sync();
@@ -322,9 +333,14 @@ export function TracklistSection() {
     offset: ["start start", "end start"],
   });
 
-  const exitP = useTransform(sectionProgress, [0.68, 1], [0, 1], {
-    clamp: true,
-  });
+  const exitP = useTransform(
+    sectionProgress,
+    [TRACKLIST_EXIT_SHRINK_PROGRESS_START, 1],
+    [0, 1],
+    {
+      clamp: true,
+    },
+  );
 
   const panelWidthPx = useTransform([exitP, baseWidthPx], ([p, bw]) => {
     const vw = typeof window !== "undefined" ? window.innerWidth : 0;
@@ -354,11 +370,16 @@ export function TracklistSection() {
       <div className="relative z-10 mx-auto w-full max-w-[1600px] px-5 sm:px-6 md:px-8 lg:px-10">
         <div ref={wrapperRef} className="w-full">
           <motion.div
-            className="relative overflow-hidden rounded-sm"
+            data-cursor-light-bg
+            className={`relative overflow-hidden rounded-sm ${panelMetricsReady ? "" : "w-full"}`}
             style={{
               backgroundColor: cream,
-              width: panelWidthPx,
-              marginLeft: panelMarginLeftPx,
+              ...(panelMetricsReady
+                ? {
+                    width: panelWidthPx,
+                    marginLeft: panelMarginLeftPx,
+                  }
+                : {}),
             }}
           >
             {/* Imagen de textura encima del crema (como antes: no hay capa opaca encima). */}

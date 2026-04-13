@@ -54,9 +54,9 @@ function MerchHeroTitleChars() {
     return (
       <span
         key={`${char}-${i}`}
-        className="char-mask inline-block overflow-hidden align-bottom"
+        className="char-mask inline-block overflow-visible align-bottom [transform-style:preserve-3d]"
       >
-        <span className="char inline-block will-change-[transform,opacity]">
+        <span className="char inline-block will-change-transform [transform-style:preserve-3d] [backface-visibility:hidden]">
           {char}
         </span>
       </span>
@@ -72,20 +72,43 @@ export function MerchSection() {
     if (!section) return;
 
     const chars = section.querySelectorAll<HTMLElement>(".hero-title .char");
+    const subtitle = section.querySelector<HTMLElement>(".merch-hero-subtitle");
     if (chars.length === 0) return;
 
-    const tween = gsap.from(chars, {
-      paused: true,
-      duration: 1,
-      y: "100%",
-      opacity: 0,
-      scaleY: 1.5,
-      skewY: 10,
-      transformOrigin: "bottom center",
-      ease: "power4.out",
-      stagger: 0.04,
-      delay: 0.2,
-    });
+    /** Entrada 3D con GSAP: letras basculan en X desde “tumbadas” hacia el plano. */
+    const tl = gsap.timeline({ paused: true });
+
+    tl.from(
+      chars,
+      {
+        duration: 0.78,
+        rotationX: -78,
+        opacity: 0,
+        y: 40,
+        z: -72,
+        transformOrigin: "50% 100% 0",
+        ease: "power3.out",
+        stagger: 0.028,
+        force3D: true,
+      },
+      0.06,
+    );
+
+    if (subtitle) {
+      tl.from(
+        subtitle,
+        {
+          duration: 0.58,
+          rotationX: -40,
+          opacity: 0,
+          y: 22,
+          transformOrigin: "50% 0% 0",
+          ease: "power3.out",
+          force3D: true,
+        },
+        "-=0.42",
+      );
+    }
 
     let played = false;
     let observer: IntersectionObserver | null = null;
@@ -94,7 +117,7 @@ export function MerchSection() {
       if (played) return;
       played = true;
       observer?.disconnect();
-      tween.play(0);
+      tl.play(0);
     };
 
     observer = new IntersectionObserver(
@@ -116,7 +139,7 @@ export function MerchSection() {
 
     return () => {
       observer?.disconnect();
-      tween.kill();
+      tl.kill();
     };
   }, []);
 
@@ -124,19 +147,20 @@ export function MerchSection() {
     <section
       ref={sectionRef}
       id="merch"
+      data-cursor-light-bg
       aria-labelledby="merch-heading"
       className="flex min-h-screen flex-col items-center overflow-visible bg-white px-6 pb-24 pt-24 text-black md:pt-28"
     >
       <div className="flex w-full max-w-6xl flex-col items-center xl:max-w-7xl">
-        <div className="overflow-visible text-center">
+        <div className="overflow-visible text-center [perspective:min(100vw,1400px)] [transform-style:preserve-3d]">
           <h2
             id="merch-heading"
-            className="hero-title font-sans text-[clamp(3rem,10vw,6rem)] font-black leading-[1.05] tracking-tight text-black"
+            className="hero-title font-sans text-[clamp(3rem,10vw,6rem)] font-black leading-[1.05] tracking-tight text-black [transform-style:preserve-3d]"
           >
             <MerchHeroTitleChars />
           </h2>
           <p
-            className={`mt-3 text-[clamp(1rem,2.4vw,1.375rem)] leading-tight text-neutral-500 ${merchSubtitle.className}`}
+            className={`merch-hero-subtitle mt-3 text-[clamp(1rem,2.4vw,1.375rem)] leading-tight text-neutral-500 [transform-style:preserve-3d] ${merchSubtitle.className}`}
           >
             Temporada 2026
           </p>

@@ -44,17 +44,7 @@ export function SiteFooter() {
     <footer id="contacto" className="relative w-full scroll-mt-4">
       <div className="bg-[#C4B04D] text-[#0A0A0A]">
         <div className="mx-auto w-full max-w-[1600px] px-6 py-14 md:px-10 md:py-16 lg:px-14 lg:py-20">
-          <motion.h2
-            className="text-center font-sans text-[clamp(1.5rem,4vw,2rem)] font-bold uppercase tracking-[0.22em] text-[#0A0A0A]"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.5, ease: contactEase }}
-          >
-            Contacto
-          </motion.h2>
-
-          <div className="mt-12 grid grid-cols-1 gap-12 md:mt-14 md:grid-cols-3 md:gap-10 lg:gap-14">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-10 lg:gap-14">
             {footerContactColumns.map((col, colIndex) => (
               <motion.div
                 key={col.id}

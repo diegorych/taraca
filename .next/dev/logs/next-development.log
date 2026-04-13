@@ -1,0 +1,213 @@
+[00:00:03.578] Server  LOG     ✓ Ready in 3.4s
+[00:00:06.862] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:07.072] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>
+      <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<SegmentViewNode>} forbidden={undefined} ...>
+        <RedirectBoundary>
+          <RedirectErrorBoundary router={{...}}>
+            <InnerLayoutRouter url="/" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} segmentPath={[...]} ...>
+              <SegmentViewNode type="page" pagePath="page.tsx">
+                <SegmentTrieNode>
+                <Home>
+                  <HomePageSections>
+                    <main className="min-h-scre...">
+                      <HeroSection>
+                      <ManifestoSection>
+                      <CinematicSection>
+                      <TracklistSection>
+                        <section ref={{current:null}} id="tracklist" className="relative m...">
+                          <div>
+                          <div className="relative z...">
+                            <div ref={{current:null}} className="w-full">
+                              <motion.div className="relative o..." style={{...}}>
+                                <div
+                                  className="relative overflow-hidden rounded-sm"
+                                  style={{
++                                   backgroundColor: "#F5F0E8"
++                                   width: "925px"
+-                                   width: "0px"
++                                   marginLeft: "0px"
+-                                   background-color: "rgb(245, 240, 232)"
+-                                   margin-left: "0px"
+                                  }}
+                                  ref={function useMotionRef.useCallback}
+                                >
+                          ...
+                      ...
+              ...
+            ...
+
+[00:00:07.072] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:00:47.203] Server  LOG     ✓ Compiled in 0ms
+[00:02:20.155] Server  LOG     ✓ Compiled in 193ms
+[00:02:20.710] Server  LOG     ✓ Compiled in 32ms
+[00:02:54.653] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:55.326] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:04:56.800] Server  LOG     ✓ Compiled in 1194ms
+[00:05:02.215] Server  LOG     ✓ Compiled in 213ms
+[00:05:09.879] Server  LOG     ✓ Compiled in 315ms
+[00:06:25.259] Server  LOG     ✓ Compiled in 299ms
+[00:06:27.682] Server  LOG     ✓ Compiled in 288ms
+[00:06:27.859] Browser ERROR   uncaughtError: ReferenceError: estarVideoWidth is not defined
+[00:06:27.960] Browser ERROR   uncaughtError: ReferenceError: estarVideoWidth is not defined
+[00:06:29.861] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:06:29.864] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:06:29.869] Server  LOG     ✓ Compiled in 605ms
+[00:06:31.849] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:32.132] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:06:32.439] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:32.740] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:06:34.086] Server  LOG     ✓ Compiled in 481ms
+[00:07:33.741] Server  LOG     ✓ Compiled in 169ms
+[00:07:37.435] Server  LOG     ✓ Compiled in 41ms
+[00:07:37.602] Browser ERROR   uncaughtError: ReferenceError: estarVideoClipPath is not defined
+[00:07:37.604] Browser ERROR   uncaughtError: ReferenceError: estarVideoClipPath is not defined
+[00:07:39.067] Server  LOG     ✓ Compiled in 423ms
+[00:07:39.087] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:39.091] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:41.093] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:41.493] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:41.524] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:07:41.822] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:07:45.643] Server  LOG     ✓ Compiled in 166ms
+[00:10:17.027] Server  LOG     ✓ Compiled in 243ms
+[00:10:18.005] Server  LOG     ✓ Compiled in 89ms
+[00:10:21.036] Server  LOG     ✓ Compiled in 411ms
+[00:10:36.643] Server  LOG     ✓ Compiled in 185ms
+[00:12:33.872] Server  LOG     ✓ Compiled in 1101ms
+[00:12:38.486] Server  LOG     ✓ Compiled in 311ms
+[00:13:34.353] Server  LOG     ✓ Compiled in 237ms
+[00:20:08.358] Server  LOG     ✓ Compiled in 1477ms
+[00:22:11.198] Server  LOG     ✓ Compiled in 732ms
+[00:24:48.321] Server  LOG     ✓ Compiled in 540ms
+[00:24:52.521] Server  LOG     ✓ Compiled in 170ms
+[00:24:55.824] Server  LOG     ✓ Compiled in 1011ms
+[00:26:17.832] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:26:18.195] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:26:28.424] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:26:28.828] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[03:47:12.470] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:47:12.834] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[03:48:37.146] Server  LOG     ✓ Compiled in 3.9s
+[03:48:43.140] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:48:43.625] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[03:48:59.434] Server  LOG     ✓ Compiled in 1177ms
+[03:49:35.064] Server  LOG     ✓ Compiled in 193ms
+[03:50:52.390] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:50:52.701] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[03:51:11.094] Server  LOG     ✓ Compiled in 678ms
+[03:51:11.923] Server  LOG     ✓ Compiled in 97ms
+[03:52:40.353] Server  LOG     ✓ Compiled in 354ms
+[03:55:05.391] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:55:05.717] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[03:55:58.836] Server  LOG     ✓ Compiled in 247ms
+[03:55:59.352] Server  LOG     ✓ Compiled in 37ms
+[03:56:00.155] Server  LOG     ✓ Compiled in 26ms
+[03:56:01.496] Server  LOG     ✓ Compiled in 86ms
+[03:56:02.660] Server  LOG     ✓ Compiled in 40ms
+[03:56:06.035] Server  LOG     ✓ Compiled in 211ms
+[03:56:37.547] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:56:37.755] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:02:41.488] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:02:41.811] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:32:39.524] Server  LOG     ✓ Compiled in 1252ms
+[04:35:36.569] Server  LOG     ✓ Compiled in 426ms
+[04:35:38.781] Server  LOG     ✓ Compiled in 195ms
+[04:35:39.249] Browser ERROR   uncaughtError: ReferenceError: heroImgY is not defined
+[04:35:40.201] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[04:35:40.398] Browser ERROR   uncaughtError: ReferenceError: heroImgYWithMouse is not defined
+[04:35:40.691] Server  LOG     ✓ Compiled in 18ms
+[04:35:42.400] Server  ERROR   ⨯ ReferenceError: heroImgYWithMouse is not defined
+[04:35:43.023] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:35:43.224] Browser ERROR   uncaughtError: ReferenceError: heroImgYWithMouse is not defined
+[04:35:49.619] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[04:35:49.629] Server  LOG     ✓ Compiled in 83ms
+[04:35:50.787] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:35:51.118] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:35:59.033] Server  LOG     ✓ Compiled in 404ms
+[04:35:59.138] Browser ERROR   ./components/features/Hero.tsx:275:1
+Parsing ecmascript source code failed
+  273 |     </section>
+  274 |   );
+> 275 | }
+      | ^
+  276 |
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./components/features/Hero.tsx [Client Component Browser]
+    ./components/sections/hero/HeroSection.tsx [Client Component Browser]
+    ./components/sections/hero/HeroSection.tsx [Server Component]
+    ./components/sections/home/HomePageSections.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/features/Hero.tsx [Client Component SSR]
+    ./components/sections/hero/HeroSection.tsx [Client Component SSR]
+    ./components/sections/hero/HeroSection.tsx [Server Component]
+    ./components/sections/home/HomePageSections.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+[04:36:00.265] Server  LOG     ✓ Compiled in 231ms
+[04:36:59.443] Server  LOG     ✓ Compiled in 207ms
+[04:36:59.555] Browser ERROR   uncaughtError: ReferenceError: drexlerScrollY is not defined
+[04:37:00.359] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[04:37:00.369] Server  LOG     ✓ Compiled in 124ms
+[04:37:00.937] Server  ERROR   ⨯ ReferenceError: drexlerYWithMouse is not defined
+[04:37:00.959] Browser ERROR   uncaughtError: ReferenceError: drexlerYWithMouse is not defined
+[04:37:01.390] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:37:01.594] Browser ERROR   uncaughtError: ReferenceError: drexlerYWithMouse is not defined
+[04:37:04.951] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[04:37:04.964] Server  LOG     ✓ Compiled in 74ms
+[04:37:05.987] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:37:06.197] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:40:07.813] Server  LOG     ✓ Compiled in 514ms
+[04:41:31.788] Server  LOG     ✓ Compiled in 321ms
+[04:41:35.116] Server  LOG     ✓ Compiled in 84ms
+[04:41:54.233] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:41:54.717] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:42:00.188] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:42:00.405] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:42:13.285] Server  LOG     ✓ Compiled in 1269ms
+[04:42:46.796] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:42:47.044] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:43:07.225] Server  LOG     ✓ Compiled in 486ms
+[04:43:10.708] Server  LOG     ✓ Compiled in 266ms
+[04:43:24.387] Server  LOG     ✓ Compiled in 149ms
+[04:43:28.831] Server  LOG     ✓ Compiled in 137ms
+[04:43:31.698] Server  LOG     ✓ Compiled in 239ms
+[04:43:34.234] Server  LOG     ✓ Compiled in 312ms
+[04:43:39.869] Server  LOG     ✓ Compiled in 154ms
+[04:44:09.327] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:44:09.576] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:44:32.182] Server  LOG     ✓ Compiled in 273ms
+[04:44:32.447] Browser ERROR   uncaughtError: ReferenceError: drexlerScrollY is not defined
+[04:44:32.939] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[04:44:32.941] Server  LOG     ✓ Compiled in 145ms
+[04:44:33.083] Browser ERROR   uncaughtError: ReferenceError: drexlerYWithMouse is not defined
+[04:44:34.105] Server  ERROR   ⨯ ReferenceError: drexlerYWithMouse is not defined
+[04:44:34.486] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:44:34.696] Browser ERROR   uncaughtError: ReferenceError: drexlerYWithMouse is not defined
+[04:44:38.655] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[04:44:38.668] Server  LOG     ✓ Compiled in 60ms
+[04:44:39.337] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:44:39.728] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[04:45:22.741] Server  LOG     ✓ Compiled in 353ms
+[04:45:28.577] Server  LOG     ✓ Compiled in 263ms
+[04:46:03.143] Server  LOG     ✓ Compiled in 424ms
+[04:46:34.055] Server  LOG     ✓ Compiled in 293ms
+[09:45:03.925] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[09:45:04.425] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
