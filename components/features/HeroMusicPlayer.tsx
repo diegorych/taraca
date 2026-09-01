@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { EB_Garamond } from "next/font/google";
 
@@ -12,9 +12,36 @@ const ebGaramondItalic = EB_Garamond({
 
 export function HeroMusicPlayer({ show }: { show: boolean }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    if (show && audioRef.current) {
+      // Intentar autoreproducir cuando el hero se muestra
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch((err) => {
+        console.warn("Autoplay prevenido por el navegador:", err);
+        setIsPlaying(false);
+      });
+    }
+  }, [show]);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    }
+  };
 
   return (
-    <motion.div
+    <>
+      <audio ref={audioRef} src="/audio/el-tambor-chico.mp3" loop />
+      <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: show ? 1 : 0, y: show ? 0 : 16 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
@@ -34,7 +61,7 @@ export function HeroMusicPlayer({ show }: { show: boolean }) {
         </button>
         
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={togglePlay}
           className="w-8 h-8 flex items-center justify-center rounded-full border border-[#D2D0CE]/30 bg-[#111] hover:bg-[#222] transition-colors text-[#D2D0CE]"
           aria-label={isPlaying ? "Pausar" : "Reproducir"}
         >
@@ -65,14 +92,37 @@ export function HeroMusicPlayer({ show }: { show: boolean }) {
       <div className="w-px h-5 bg-[#D2D0CE]/20" />
 
       {/* Info de la canción */}
-      <div className="flex flex-col justify-center min-w-[90px] md:min-w-[110px]">
-        <span className="text-[8px] md:text-[9px] uppercase tracking-[0.2em] opacity-50 leading-none mb-1">
-          Escuchando
-        </span>
-        <span className={`text-[13px] md:text-[15px] leading-none text-[#E8E6E3] ${ebGaramondItalic.className}`}>
-          Taracá
-        </span>
-      </div>
-    </motion.div>
+        <div className="flex flex-col justify-center min-w-[90px] md:min-w-[110px]">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[8px] md:text-[9px] uppercase tracking-[0.2em] opacity-50 leading-none">
+              Escuchando
+            </span>
+            {/* Audio Visualizer */}
+            <div className="flex items-end gap-[2px] h-2.5">
+              {[0.7, 0.9, 0.6, 0.8].map((duration, i) => (
+                <div
+                  key={i}
+                  className="w-[2px] bg-[#E8E6E3]/70 rounded-full origin-bottom"
+                  style={{
+                    height: '100%',
+                    animationName: isPlaying ? 'audio-bar' : 'none',
+                    animationDuration: `${duration}s`,
+                    animationTimingFunction: 'ease-in-out',
+                    animationIterationCount: 'infinite',
+                    animationDirection: 'alternate',
+                    animationDelay: `${i * 0.15}s`,
+                    transform: 'scaleY(0.2)',
+                    transition: 'transform 0.3s ease'
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+          <span className={`text-[13px] md:text-[15px] leading-none text-[#E8E6E3] ${ebGaramondItalic.className}`}>
+            El tambor chico
+          </span>
+        </div>
+      </motion.div>
+    </>
   );
 }

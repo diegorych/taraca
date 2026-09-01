@@ -154,13 +154,13 @@ export function TourDatesBlock({ events }: { events: TourEvent[] }) {
       className="relative overflow-x-clip"
       aria-labelledby="gira-dates-heading"
     >
-      {/* Padding superior + mismo fondo que la sección gira; el inferior va en blanco para enlazar con merch */}
-      <div className="bg-[#0D0D0D] pt-12 md:pt-16 lg:pt-20">
+      {/* Fondo transparente: el overflow del hero (foto) se ve en este tramo; el color lo da #gira */}
+      <div className="relative z-10 bg-transparent pt-12 md:pt-16 lg:pt-20">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-14">
           <div ref={wrapperRef} className="w-full">
             <motion.div
               ref={panelRef}
-              className="relative overflow-hidden rounded-sm"
+              className="relative z-20 -mt-14 overflow-hidden rounded-sm md:-mt-16 lg:-mt-20"
               style={{
                 width: panelWidthPx,
                 marginLeft: panelMarginLeftPx,

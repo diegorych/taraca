@@ -1283,8 +1283,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$sections$2f$ma
 /** Al pasar este progreso, arranca el bloque (texto + video del tambor). */ const TEXT_TRIGGER_PROGRESS = 0.05;
 /** Video primero; el texto entra después con este retraso (s) */ const TEXT_AFTER_VIDEO_DELAY = 1.5;
 const TEXT_FADE_IN_DURATION = 0.7;
-const numberedListNumClass = "shrink-0 w-8 md:w-10 pt-[0.08em] text-right font-sans font-normal tabular-nums text-[22px] md:text-[22px] leading-[1.45]";
-const numberedListBodyClass = "min-w-0 flex-1 font-sans text-[18px] md:text-[24px] font-normal leading-[1.45] text-[#ffffff]";
+const numberedListNumClass = "shrink-0 w-8 md:w-10 pt-[0.08em] text-right font-sans font-normal tabular-nums text-[20px] leading-[1.45]";
+const numberedListBodyClass = "min-w-0 flex-1 font-sans text-[20px] font-normal leading-[1.45] text-[#ffffff]";
 const subtitleAlignWithListBodyClass = "pl-12 md:pl-[3.75rem]";
 const DEFINITION_1_PLAIN = "Patrón rítmico:\nSonido del Tambor Chico: un golpe de mano acentuado (TA) seguido de dos golpes de palo (RA-CA).";
 const DEFINITION_2_PLAIN = "Localización:\nAféresis de \u201cestar acá\u201d, utilizada en la zona del Río de la Plata como expresión de ubicación inmediata.";
@@ -1727,7 +1727,7 @@ function ManifestoSection() {
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
-                                    className: "mt-10 flex w-full flex-col gap-y-6 md:mt-12 md:gap-y-8",
+                                    className: "mt-10 flex w-full max-w-[min(100%,22rem)] flex-col gap-y-6 md:mt-12 md:max-w-[min(100%,28rem)] md:gap-y-8",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "w-full",
@@ -3208,7 +3208,7 @@ function TourDatesBlock({ events }) {
         "aria-labelledby": "gira-dates-heading",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "bg-[#0D0D0D] pt-12 md:pt-16 lg:pt-20",
+                className: "relative z-10 bg-transparent pt-12 md:pt-16 lg:pt-20",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-14",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3216,7 +3216,7 @@ function TourDatesBlock({ events }) {
                         className: "w-full",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
                             ref: panelRef,
-                            className: "relative overflow-hidden rounded-sm",
+                            className: "relative z-20 -mt-14 overflow-hidden rounded-sm md:-mt-16 lg:-mt-20",
                             style: {
                                 width: panelWidthPx,
                                 marginLeft: panelMarginLeftPx
@@ -3346,6 +3346,7 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$utils$2f$use$2d$in$2d$view$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/utils/use-in-view.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$utils$2f$reduced$2d$motion$2f$use$2d$reduced$2d$motion$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/utils/reduced-motion/use-reduced-motion.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$scroll$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/value/use-scroll.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/value/use-transform.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
@@ -3373,6 +3374,7 @@ const maskRevealTransition = (delay)=>({
     });
 function TourHeaderBlock() {
     const headerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const prefersReducedMotion = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$utils$2f$reduced$2d$motion$2f$use$2d$reduced$2d$motion$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useReducedMotion"])();
     /** Observar el header entero: si la máscara está en el texto, whileInView puede no dispararse (área visible 0). */ const headerInView = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$utils$2f$use$2d$in$2d$view$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useInView"])(headerRef, {
         once: true,
         amount: 0.12,
@@ -3402,14 +3404,37 @@ function TourHeaderBlock() {
         -7,
         7
     ]);
+    /** Figura Drexler: menos recorrido Y que el manuscrito (capa más “atrás”). */ const drexlerY = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, (p)=>prefersReducedMotion === true ? 0 : -42 + p * 84);
     const { titleLine1, titleLine2, ctaLinkLabel, ctaAfterLine1, ctaAfterLine2, followHref } = __TURBOPACK__imported__module__$5b$project$5d2f$content$2f$sections$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tourSectionContent"];
     const linkIsExternal = /^https?:\/\//i.test(followHref);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
         ref: headerRef,
-        className: "relative flex h-[520px] min-h-[520px] flex-col justify-end overflow-hidden bg-[#0D0D0D]",
+        className: "relative flex h-[520px] min-h-[520px] flex-col justify-end overflow-x-clip overflow-y-visible bg-[#0D0D0D]",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
-                className: "pointer-events-none absolute bottom-6 left-6 z-[4] h-[460px] w-[min(52vw,560px)] max-w-[95vw] -translate-x-[12%] -rotate-[3deg] will-change-transform sm:bottom-7 sm:left-10 sm:-translate-x-[14%] md:-translate-x-[16%] lg:bottom-0 lg:left-14 lg:w-[min(48vw,540px)] lg:-translate-x-[18%] xl:left-[max(1.5rem,calc((100vw-100rem)/2+1.5rem))]",
+                className: "pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex h-full items-end justify-end px-6 will-change-transform md:px-10 lg:px-14",
+                style: {
+                    y: drexlerY
+                },
+                "aria-hidden": true,
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                    src: "/images/tour-drexler-pose.png",
+                    alt: "",
+                    className: "h-[min(820px,88vh)] w-auto max-w-[min(62vw,600px)] translate-y-[28%] object-contain object-bottom [filter:sepia(0.12)_contrast(1.05)]",
+                    loading: "eager",
+                    decoding: "async"
+                }, void 0, false, {
+                    fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
+                    lineNumber: 67,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
+                lineNumber: 62,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                className: "pointer-events-none absolute bottom-6 left-6 z-[4] h-[460px] w-[min(52vw,560px)] max-w-[95vw] -translate-x-[15%] -rotate-[3deg] will-change-transform md:bottom-0 md:left-10 lg:left-14",
                 style: {
                     y: manuscriptY
                 },
@@ -3421,16 +3446,16 @@ function TourHeaderBlock() {
                     loading: "lazy"
                 }, void 0, false, {
                     fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                    lineNumber: 56,
+                    lineNumber: 82,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                lineNumber: 51,
+                lineNumber: 77,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
-                className: "pointer-events-none absolute left-[26%] top-[7%] z-[5] w-[min(72vw,720px)] max-w-[92vw] sm:left-[30%] md:left-[34%] lg:left-[30%] lg:top-[-24%] lg:w-[min(64vw,760px)]",
+                className: "pointer-events-none absolute left-[25%] top-[7%] z-[5] w-[580px] max-w-[92vw] lg:top-[-32%]",
                 style: {
                     y: manuscriptY
                 },
@@ -3444,17 +3469,17 @@ function TourHeaderBlock() {
                         loading: "lazy"
                     }, void 0, false, {
                         fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                        lineNumber: 71,
+                        lineNumber: 97,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                    lineNumber: 70,
+                    lineNumber: 96,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                lineNumber: 65,
+                lineNumber: 91,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -3476,12 +3501,12 @@ function TourHeaderBlock() {
                                     children: titleLine1
                                 }, void 0, false, {
                                     fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                                    lineNumber: 86,
+                                    lineNumber: 112,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                                lineNumber: 85,
+                                lineNumber: 111,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3494,18 +3519,18 @@ function TourHeaderBlock() {
                                     children: titleLine2
                                 }, void 0, false, {
                                     fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                                    lineNumber: 96,
+                                    lineNumber: 122,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                                lineNumber: 95,
+                                lineNumber: 121,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                        lineNumber: 84,
+                        lineNumber: 110,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3526,37 +3551,37 @@ function TourHeaderBlock() {
                                     children: ctaLinkLabel
                                 }, void 0, false, {
                                     fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                                    lineNumber: 114,
+                                    lineNumber: 140,
                                     columnNumber: 13
                                 }, this),
                                 ctaAfterLine1,
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                     fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                                    lineNumber: 124,
+                                    lineNumber: 150,
                                     columnNumber: 13
                                 }, this),
                                 ctaAfterLine2
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                            lineNumber: 108,
+                            lineNumber: 134,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                        lineNumber: 107,
+                        lineNumber: 133,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-                lineNumber: 80,
+                lineNumber: 106,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/sections/tour/TourHeaderBlock.tsx",
-        lineNumber: 46,
+        lineNumber: 57,
         columnNumber: 5
     }, this);
 }

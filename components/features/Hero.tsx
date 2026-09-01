@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import { AnimatedLogo } from "./AnimatedLogo";
 import { HeroMusicPlayer } from "./HeroMusicPlayer";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useIntroSequence } from "@/components/providers/IntroSequenceProvider";
@@ -25,7 +26,7 @@ export const Hero = () => {
   const [showBg, setShowBg] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
   const [showDecor, setShowDecor] = useState(false);
-  const { setShowHeader } = useIntroSequence();
+  const { setShowHeader, preloaderFinished } = useIntroSequence();
   const containerRef = useRef<HTMLElement>(null);
   const heroInViewRef = useRef(false);
   const reducedMotion = useReducedMotion();
@@ -97,8 +98,18 @@ export const Hero = () => {
   const decorAmarilloY = useTransform(scrollYProgress, [0, 1], [0, -492]);
   const decorCuadradoY = useTransform(scrollYProgress, [0, 1], [0, -312]);
 
+  /** Indicador “seguí bajando”: se desvanece al salir del hero. */
+  const scrollHintOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.28],
+    [1, 0],
+    { clamp: true },
+  );
+
   useEffect(() => {
     setShowHeader(false);
+
+    if (!preloaderFinished) return;
 
     const bgTimer = window.setTimeout(() => setShowBg(true), 60);
     const logoTimer = window.setTimeout(() => setShowLogo(true), 410);
@@ -110,9 +121,8 @@ export const Hero = () => {
       window.clearTimeout(logoTimer);
       window.clearTimeout(decorTimer);
       window.clearTimeout(headerTimer);
-      setShowHeader(true);
     };
-  }, [setShowHeader]);
+  }, [setShowHeader, preloaderFinished]);
 
   return (
     <section ref={containerRef} className="relative z-20 w-full h-[150vh] bg-[#0A0A0A]">
@@ -258,6 +268,36 @@ export const Hero = () => {
             />
           </motion.div>
         </motion.div>
+
+        {showDecor && (
+          <motion.div
+            className="pointer-events-none absolute inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[35] flex flex-col items-center md:bottom-8"
+            style={{ opacity: scrollHintOpacity }}
+            aria-hidden
+          >
+            <span className="mb-1.5 text-[10px] font-medium uppercase tracking-[0.22em] text-white/55 md:text-[11px]">
+              Seguir bajando
+            </span>
+            <motion.div
+              animate={
+                reducedMotion
+                  ? { y: 0 }
+                  : { y: [0, 7, 0] }
+              }
+              transition={{
+                duration: 1.55,
+                repeat: reducedMotion ? 0 : Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <ChevronDown
+                className="h-5 w-5 text-white/45 md:h-6 md:w-6"
+                strokeWidth={1.5}
+                aria-hidden
+              />
+            </motion.div>
+          </motion.div>
+        )}
       </div>
     </section>
   );

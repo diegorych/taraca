@@ -2,7 +2,9 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 
-const CURSOR_CLASS = "use-custom-cursor";
+/** Interpolación hacia el puntero real (más bajo = más “retraso”). */
+const FOLLOW_LERP = 0.16;
+const FOLLOW_STOP_DIST_SQ = 0.25;
 
 function closestInteractive(el: Element | null): Element | null {
   if (!el || !(el instanceof Element)) return null;
@@ -49,11 +51,13 @@ function isInteractiveTarget(el: Element | null): boolean {
 }
 
 /**
- * Cursor personalizado: anillo; sobre elemento cliqueable → círculo pequeño relleno.
+ * Punto que acompaña al cursor: no sustituye al puntero del sistema y va con ligero retraso (lerp).
+ * Sobre elemento cliqueable → punto más chico.
  */
 export function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
-  const pos = useRef({ x: 0, y: 0 });
+  const pointer = useRef({ x: 0, y: 0 });
+  const follower = useRef({ x: 0, y: 0 });
   const raf = useRef(0);
   const filledRef = useRef(false);
   const lightBgRef = useRef(false);
@@ -67,19 +71,17 @@ export function CustomCursor() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
-    const root = document.documentElement;
-    const { body } = document;
-    root.classList.add(CURSOR_CLASS);
-    body.classList.add(CURSOR_CLASS);
-
-    const flush = () => {
+    const tick = () => {
       raf.current = 0;
       const ring = ringRef.current;
-      const { x, y } = pos.current;
+      const p = pointer.current;
+      const f = follower.current;
+      f.x += (p.x - f.x) * FOLLOW_LERP;
+      f.y += (p.y - f.y) * FOLLOW_LERP;
       if (ring) {
-        ring.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+        ring.style.transform = `translate3d(${f.x}px, ${f.y}px, 0) translate(-50%, -50%)`;
       }
-      const hit = document.elementFromPoint(x, y);
+      const hit = document.elementFromPoint(p.x, p.y);
       const nextFilled = isInteractiveTarget(hit);
       if (nextFilled !== filledRef.current) {
         filledRef.current = nextFilled;
@@ -90,21 +92,26 @@ export function CustomCursor() {
         lightBgRef.current = nextLight;
         setLightBg(nextLight);
       }
+      const dx = p.x - f.x;
+      const dy = p.y - f.y;
+      if (dx * dx + dy * dy > FOLLOW_STOP_DIST_SQ) {
+        raf.current = requestAnimationFrame(tick);
+      }
     };
 
-    pos.current = {
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
-    };
-    flush();
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    pointer.current = { x: cx, y: cy };
+    follower.current = { x: cx, y: cy };
+    tick();
     setLive(true);
 
     const onMove = (e: PointerEvent) => {
-      pos.current.x = e.clientX;
-      pos.current.y = e.clientY;
+      pointer.current.x = e.clientX;
+      pointer.current.y = e.clientY;
       setVisible(true);
       if (raf.current === 0) {
-        raf.current = requestAnimationFrame(flush);
+        raf.current = requestAnimationFrame(tick);
       }
     };
 
@@ -119,8 +126,6 @@ export function CustomCursor() {
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
-      root.classList.remove(CURSOR_CLASS);
-      body.classList.remove(CURSOR_CLASS);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("blur", onHide);
       document.removeEventListener("visibilitychange", onVisibility);
@@ -130,18 +135,18 @@ export function CustomCursor() {
 
   const ringPalette = lightBg
     ? filled
-      ? "h-3.5 w-3.5 border-0 bg-black/85 md:h-4 md:w-4"
-      : "h-9 w-9 border-2 border-black/55 bg-transparent md:h-10 md:w-10"
+      ? "h-2.5 w-2.5 border-0 bg-black/90 md:h-3 md:w-3"
+      : "h-4 w-4 border-0 bg-black/80 md:h-[18px] md:w-[18px]"
     : filled
-      ? "h-3.5 w-3.5 border-0 bg-white/90 md:h-4 md:w-4"
-      : "h-9 w-9 border-2 border-white/75 bg-transparent md:h-10 md:w-10";
+      ? "h-2.5 w-2.5 border-0 bg-white/92 md:h-3 md:w-3"
+      : "h-4 w-4 border-0 bg-white/85 md:h-[18px] md:w-[18px]";
 
   return (
     <div
       ref={ringRef}
       className={[
         "pointer-events-none fixed left-0 top-0 z-[10050] rounded-full will-change-transform",
-        "transition-[width,height,opacity,border-width,background-color,border-color]",
+        "transition-[width,height,opacity,background-color]",
         "duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
         ringPalette,
         live && visible ? "opacity-100" : "opacity-0",

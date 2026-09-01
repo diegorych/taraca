@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  motion,
-  useInView,
-  useMotionValue,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { EB_Garamond } from "next/font/google";
 import {
   Fragment,
@@ -39,12 +33,6 @@ const legalText =
   "(P) y © 2026 Sony Music Entertainment España S.L. Todas las marcas y logotipos están protegidos. Editado y distribuido por Sony Music España. Paseo de la Castellana 202, 7ª planta, 28046 Madrid (Spain). Sony Music Entertainment International Services GmbH, PO Box 510, 33311 Gütersloh, Germany. Sony Music UK, 2 Canal Reach, Kings Cross, London N1C 4DB, United Kingdom. product.service@sonymusic.com / All trademarks and logos are protected. All rights reserved. Made in the EU.";
 
 const tracklistViewport = { once: true, amount: 0.12 } as const;
-
-/**
- * Progreso de scroll de la sección (offset start start → end start) a partir del cual
- * el panel deja el ancho viewport y se estrecha. Más bajo = el efecto empieza antes.
- */
-const TRACKLIST_EXIT_SHRINK_PROGRESS_START = 0.52;
 
 /** Cada fila se revela al hacer scroll (no todas a la vez). */
 const trackRowViewport = {
@@ -294,66 +282,9 @@ export function TracklistSection() {
    */
   const contentY = useTransform(scrollYProgress, [0, 1], [-36, 36]);
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const baseWidthPx = useMotionValue(0);
-  const bleedLeftPx = useMotionValue(0);
-  /** Sin medidas, width=100vw + margin=0 desplaza el panel a la derecha (hueco a la izquierda). */
-  const [panelMetricsReady, setPanelMetricsReady] = useState(false);
-
-  useLayoutEffect(() => {
-    const el = wrapperRef.current;
-    if (!el || typeof window === "undefined") return;
-
-    const sync = () => {
-      const r = el.getBoundingClientRect();
-      baseWidthPx.set(r.width);
-      bleedLeftPx.set(r.left);
-      if (r.width > 0) {
-        setPanelMetricsReady(true);
-      }
-    };
-
-    sync();
-    const ro = new ResizeObserver(sync);
-    ro.observe(el);
-    window.addEventListener("resize", sync);
-
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", sync);
-    };
-  }, [baseWidthPx, bleedLeftPx]);
-
-  /**
-   * Inversa de TourDatesBlock: allí width = bw + p*(vw-bw) al entrar (p 0→1).
-   * Aquí, al final de la sección: width = bw + (1-p)*(vw-bw), margin = -(1-p)*bleedLeft.
-   */
-  const { scrollYProgress: sectionProgress } = useScroll({
-    target: tracklistSectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const exitP = useTransform(
-    sectionProgress,
-    [TRACKLIST_EXIT_SHRINK_PROGRESS_START, 1],
-    [0, 1],
-    {
-      clamp: true,
-    },
-  );
-
-  const panelWidthPx = useTransform([exitP, baseWidthPx], ([p, bw]) => {
-    const vw = typeof window !== "undefined" ? window.innerWidth : 0;
-    const bwN = Number(bw);
-    if (bwN <= 0 || vw <= 0) return vw;
-    return bwN + (1 - Number(p)) * (vw - bwN);
-  });
-
-  const panelMarginLeftPx = useTransform(
-    [exitP, bleedLeftPx, baseWidthPx],
-    ([p, left, bw]) =>
-      Number(bw) <= 0 ? 0 : -(1 - Number(p)) * Number(left),
-  );
+  /** Ancho del panel respecto al viewport: empieza al 100% y se estrecha. */
+  const panelWidth = useTransform(scrollYProgress, [0, 1], ["100%", "89%"]);
+  const panelRadius = useTransform(scrollYProgress, [0, 1], ["0px", "8px"]);
 
   return (
     <section
@@ -361,107 +292,101 @@ export function TracklistSection() {
       id="tracklist"
       className="relative min-h-screen overflow-x-clip overflow-y-visible pb-20 md:pb-24 lg:pb-28"
     >
-      {/* Negro detrás del panel solo al estrechar al final; sin padding superior para enlace directo con el vídeo. */}
+      {/* Fondo detrás del panel */}
       <div
         className="pointer-events-none absolute inset-0 z-0 bg-[#0D0D0D]"
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-5 sm:px-6 md:px-8 lg:px-10">
-        <div ref={wrapperRef} className="w-full">
-          <motion.div
-            data-cursor-light-bg
-            className={`relative overflow-hidden rounded-sm ${panelMetricsReady ? "" : "w-full"}`}
+      <div className="relative z-10 mx-auto w-full">
+        <motion.div
+          data-cursor-light-bg
+          className="relative mx-auto overflow-hidden"
+          style={{
+            backgroundColor: cream,
+            width: panelWidth,
+            borderRadius: panelRadius,
+          }}
+        >
+          {/* Imagen de textura encima del crema (como antes: no hay capa opaca encima). */}
+          <div
+            className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat [transform:translateZ(0)] [backface-visibility:hidden]"
             style={{
-              backgroundColor: cream,
-              ...(panelMetricsReady
-                ? {
-                    width: panelWidthPx,
-                    marginLeft: panelMarginLeftPx,
-                  }
-                : {}),
+              backgroundImage: "url('/images/bg-tracklist.png')",
             }}
+            aria-hidden
+          />
+
+          <motion.div
+            className="relative z-10 px-6 py-8 pt-24 sm:px-8 sm:py-10 sm:pt-28 md:px-10 md:py-12 md:pt-28 lg:px-12 lg:py-14 lg:pt-32"
+            style={{ y: contentY }}
           >
-            {/* Imagen de textura encima del crema (como antes: no hay capa opaca encima). */}
-            <div
-              className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat [transform:translateZ(0)] [backface-visibility:hidden]"
-              style={{
-                backgroundImage: "url('/images/bg-tracklist.png')",
-              }}
-              aria-hidden
-            />
+            <motion.div
+              className={`grid grid-cols-[minmax(0,1fr)_auto] items-center pb-5 text-[#A64D3D] md:pb-7 lg:pb-8 ${ebGaramond.className}`}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={tracklistViewport}
+              transition={headerFooterTransition}
+            >
+              <p className={`text-[40px] leading-none ${ebGaramondItalic.className}`}>
+                Taracá
+              </p>
+              <p className="text-[40px] leading-none">A</p>
+            </motion.div>
+
+            <ol className="list-none overflow-visible">
+              {tracklistContent.map((track, index) => (
+                <Fragment key={track.id}>
+                  <TracklistRow
+                    track={track}
+                    index={index}
+                    hoveredTrackId={hoveredTrackId}
+                    onHoverStart={setHoveredTrackId}
+                    onHoverEnd={() => setHoveredTrackId(null)}
+                    onTrackClick={handleTrackClick}
+                    hidePreviewForModal={
+                      modalOpen && modal?.track.id === track.id
+                    }
+                  />
+                  {track.id === "05" ? (
+                    <li
+                      className={`grid min-h-[5.5rem] grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center py-5 text-[#A64D3D] sm:grid-cols-[3rem_minmax(0,1fr)_auto] md:min-h-[6.25rem] md:grid-cols-[4rem_minmax(0,1fr)_auto] md:py-7 lg:min-h-[6.75rem] lg:grid-cols-[minmax(4.5rem,5.5rem)_minmax(0,1fr)_minmax(3.5rem,auto)] lg:py-8`}
+                    >
+                      <span />
+                      <span />
+                      <span
+                        className={`justify-self-end text-[40px] leading-none ${ebGaramond.className}`}
+                      >
+                        B
+                      </span>
+                    </li>
+                  ) : null}
+                </Fragment>
+              ))}
+            </ol>
 
             <motion.div
-              className="relative z-10 px-6 py-8 pt-24 sm:px-8 sm:py-10 sm:pt-28 md:px-10 md:py-12 md:pt-28 lg:px-12 lg:py-14 lg:pt-32"
-              style={{ y: contentY }}
+              className="mt-20 flex flex-col items-center justify-center text-[#A64D3D] md:mt-24 lg:mt-32"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={tracklistViewport}
+              transition={headerFooterTransition}
             >
-              <motion.div
-                className={`grid grid-cols-[minmax(0,1fr)_auto] items-center pb-5 text-[#A64D3D] md:pb-7 lg:pb-8 ${ebGaramond.className}`}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={tracklistViewport}
-                transition={headerFooterTransition}
-              >
-                <p className={`text-[40px] leading-none ${ebGaramondItalic.className}`}>
-                  Taracá
-                </p>
-                <p className="text-[40px] leading-none">A</p>
-              </motion.div>
-
-              <ol className="list-none overflow-visible">
-                {tracklistContent.map((track, index) => (
-                  <Fragment key={track.id}>
-                    <TracklistRow
-                      track={track}
-                      index={index}
-                      hoveredTrackId={hoveredTrackId}
-                      onHoverStart={setHoveredTrackId}
-                      onHoverEnd={() => setHoveredTrackId(null)}
-                      onTrackClick={handleTrackClick}
-                      hidePreviewForModal={
-                        modalOpen && modal?.track.id === track.id
-                      }
-                    />
-                    {track.id === "05" ? (
-                      <li
-                        className={`grid min-h-[5.5rem] grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center py-5 text-[#A64D3D] sm:grid-cols-[3rem_minmax(0,1fr)_auto] md:min-h-[6.25rem] md:grid-cols-[4rem_minmax(0,1fr)_auto] md:py-7 lg:min-h-[6.75rem] lg:grid-cols-[minmax(4.5rem,5.5rem)_minmax(0,1fr)_minmax(3.5rem,auto)] lg:py-8`}
-                      >
-                        <span />
-                        <span />
-                        <span
-                          className={`justify-self-end text-[40px] leading-none ${ebGaramond.className}`}
-                        >
-                          B
-                        </span>
-                      </li>
-                    ) : null}
-                  </Fragment>
-                ))}
-              </ol>
-
-              <motion.div
-                className="mt-20 flex flex-col items-center justify-center text-[#A64D3D] md:mt-24 lg:mt-32"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={tracklistViewport}
-                transition={headerFooterTransition}
-              >
-                <img
-                  src="/images/barcode-taraca.png"
-                  alt="Codigo de barras Taraca"
-                  width={1024}
-                  height={620}
-                  className="h-auto w-full max-w-[200px] object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <p className="mt-5 w-full text-justify text-[12px] leading-tight text-black">
-                  {legalText}
-                </p>
-              </motion.div>
+              <img
+                src="/images/barcode-taraca.png"
+                alt="Codigo de barras Taraca"
+                width={1024}
+                height={620}
+                className="h-auto w-full max-w-[200px] object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+              <p className="mt-5 w-full text-justify text-[12px] leading-tight text-black">
+                {legalText}
+              </p>
             </motion.div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
       <TracklistYoutubeModal

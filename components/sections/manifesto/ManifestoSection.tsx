@@ -28,9 +28,9 @@ const TEXT_AFTER_VIDEO_DELAY = 1.5;
 const TEXT_FADE_IN_DURATION = 0.7;
 
 const numberedListNumClass =
-  "shrink-0 w-8 md:w-10 pt-[0.08em] text-right font-sans font-normal tabular-nums text-[22px] md:text-[22px] leading-[1.45]";
+  "shrink-0 w-8 md:w-10 pt-[0.08em] text-right font-sans font-normal tabular-nums text-[20px] leading-[1.45]";
 const numberedListBodyClass =
-  "min-w-0 flex-1 font-sans text-[18px] md:text-[24px] font-normal leading-[1.45] text-[#ffffff]";
+  "min-w-0 flex-1 font-sans text-[20px] font-normal leading-[1.45] text-[#ffffff]";
 
 const subtitleAlignWithListBodyClass = "pl-12 md:pl-[3.75rem]";
 
@@ -46,12 +46,12 @@ const TEXT_PARALLAX_SHIFT_PX = -30;
 const VIDEO_PARALLAX_SHIFT_PX = 6;
 
 /** El vídeo del tambor desaparece en este tramo. */
-const VIDEO_FADE_START_PROGRESS = 0.48;
-const VIDEO_FADE_END_PROGRESS = 0.6;
+const VIDEO_FADE_START_PROGRESS = 0.64;
+const VIDEO_FADE_END_PROGRESS = 0.74;
 
 /** Tras el tambor, entra el vídeo «estar acá» (mismo asset que la sección cinemática). */
 const SECOND_VIDEO_FADE_IN_START = VIDEO_FADE_END_PROGRESS;
-const SECOND_VIDEO_FADE_IN_END = 0.72;
+const SECOND_VIDEO_FADE_IN_END = 0.82;
 
 /** Tras el fade-in, la máscara (gradiente) revela el vídeo ya a ancho completo. */
 const SECOND_VIDEO_EXPAND_START = SECOND_VIDEO_FADE_IN_END;
@@ -251,7 +251,7 @@ export function ManifestoSection() {
     } else {
       setBlockPhase(1);
     }
-    setShowDefinition2(progress >= SECOND_VIDEO_FADE_IN_END - 0.04);
+    setShowDefinition2(progress >= 0.45);
 
     const rangePx = manifestoScrollRangePxRef.current;
     const leadProgress = Math.min(
@@ -433,7 +433,7 @@ export function ManifestoSection() {
                 </motion.div>
               </motion.div>
 
-              <motion.div className="mt-10 flex w-full flex-col gap-y-6 md:mt-12 md:gap-y-8">
+              <motion.div className="mt-10 flex w-full max-w-[min(100%,22rem)] flex-col gap-y-6 md:mt-12 md:max-w-[min(100%,28rem)] md:gap-y-8">
                 <div className="w-full">
                   <ManifestoDefinitionListItem
                     key="def-1"

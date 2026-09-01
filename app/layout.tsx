@@ -6,6 +6,7 @@ import { IntroSequenceProvider } from "@/components/providers/IntroSequenceProvi
 import { NavbarScrollProvider } from "@/components/providers/NavbarScrollProvider";
 import { CustomCursor } from "@/components/layout/CustomCursor";
 import { Navbar } from "@/components/layout/Navbar";
+import { Preloader } from "@/components/features/Preloader";
 
 export const metadata: Metadata = {
   title: "Taraca | Album Experience",
@@ -23,6 +24,7 @@ export default function RootLayout({
         <CustomCursor />
         <LenisProvider>
           <IntroSequenceProvider>
+            <Preloader />
             <NavbarScrollProvider>
               <Navbar />
               <main className="min-h-screen">

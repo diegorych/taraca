@@ -98,6 +98,7 @@ export class BandsintownApiProvider implements TourEventsProvider {
       const res = await fetch(url, {
         next: { revalidate: 300 },
         headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(12_000),
       });
 
       if (!res.ok) {

@@ -361,7 +361,8 @@ class BandsintownApiProvider {
                 },
                 headers: {
                     Accept: "application/json"
-                }
+                },
+                signal: AbortSignal.timeout(12_000)
             });
             if (!res.ok) {
                 console.error(`[Bandsintown] HTTP ${res.status} fetching events for "${artistName}"`);
