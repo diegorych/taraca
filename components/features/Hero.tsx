@@ -167,7 +167,7 @@ export const Hero = () => {
               className="absolute inset-0 origin-center scale-[1.06] will-change-transform"
             >
               <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-0 pt-[2vh] md:pt-[3vh]">
-                <div className="relative h-[min(98svh,2800px)] w-[min(100vw,1000px)] origin-bottom scale-[1.06] sm:h-[min(98svh,3000px)] sm:w-[min(100vw,1180px)] sm:scale-[1.08] md:h-[min(99svh,3200px)] md:w-[min(100vw,1420px)] md:scale-[1.1] lg:h-[min(99svh,3400px)] lg:w-[min(100vw,1640px)] lg:scale-[1.12] xl:w-[min(100vw,1840px)] xl:scale-[1.14]">
+                <div className="relative h-[min(98svh,2800px)] w-[min(100vw,1000px)] origin-bottom scale-[1.06] sm:h-[min(98svh,3000px)] sm:w-[min(100vw,1180px)] sm:scale-[1.08] md:h-[min(99svh,3200px)] md:w-[min(100vw,1420px)] md:scale-[1.1] lg:h-[min(99svh,3400px)] lg:w-[min(100vw,1640px)] lg:scale-[1.12] xl:w-[min(100vw,1840px)] xl:scale-[1.14] 2xl:w-[min(100vw,1800px)] 2xl:scale-[1.12] min-[1920px]:w-[min(100vw,1800px)] min-[1920px]:scale-[1.1]">
                   <Image
                     src="/images/hero-drexler-solo.png"
                     alt="Jorge Drexler"
@@ -175,7 +175,7 @@ export const Hero = () => {
                     priority
                     unoptimized
                     className="object-contain object-bottom"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1536px) 1640px, 1840px"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1536px) 1640px, (max-width: 1920px) 1800px, 1800px"
                   />
                 </div>
               </div>
@@ -199,7 +199,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: showLogo ? 1 : 0, y: showLogo ? 0 : 10 }}
             transition={{ duration: 0.65, ease: "easeOut" }}
-            className="scale-[0.98] md:scale-[1.06] lg:scale-[1.1]"
+            className="scale-[0.98] md:scale-[1.06] lg:scale-[1.1] 2xl:scale-[1.2] min-[1920px]:scale-[1.4]"
           >
             <AnimatedLogo />
           </motion.div>
@@ -214,7 +214,7 @@ export const Hero = () => {
         >
           <motion.div
             style={{ y: decorTintaY }}
-            className="absolute -left-5 md:-left-[17%] lg:-left-[15%] top-[1%] w-[80px] md:w-[106px] lg:w-[300px] xl:w-[335px]"
+            className="absolute -left-5 md:-left-[17%] lg:-left-[15%] top-[1%] w-[80px] md:w-[106px] lg:w-[300px] xl:w-[335px] 2xl:w-[400px] min-[1920px]:w-[500px]"
           >
             <motion.img
               src="/images/deco-tinta.png"
@@ -228,7 +228,7 @@ export const Hero = () => {
 
           <motion.div
             style={{ y: decorLineasY }}
-            className="absolute -right-[21%] md:-right-[15%] lg:-right-[7%] top-[12%] w-[238px] md:w-[258px] lg:w-[276px]"
+            className="absolute -right-[21%] md:-right-[15%] lg:-right-[7%] top-[12%] w-[238px] md:w-[258px] lg:w-[276px] 2xl:w-[340px] min-[1920px]:w-[420px]"
           >
             <motion.img
               src="/images/deco-lineas.png"
@@ -242,7 +242,7 @@ export const Hero = () => {
 
           <motion.div
             style={{ y: decorAmarilloY }}
-            className="absolute -left-16 md:-left-[6.25rem] lg:-left-[5.5rem] bottom-[1%] md:bottom-[1%] w-[160px] md:w-[206px] lg:w-[248px]"
+            className="absolute -left-16 md:-left-[6.25rem] lg:-left-[5.5rem] bottom-[1%] md:bottom-[1%] w-[160px] md:w-[206px] lg:w-[248px] 2xl:w-[300px] min-[1920px]:w-[380px]"
           >
             <motion.img
               src="/images/deco-amarillo.png"
@@ -256,7 +256,7 @@ export const Hero = () => {
 
           <motion.div
             style={{ y: decorCuadradoY }}
-            className="absolute -right-1 md:-right-3 lg:-right-[-2%] bottom-[-3%] md:bottom-[-3%] w-[104px] md:w-[132px] lg:w-[186px]"
+            className="absolute -right-1 md:-right-3 lg:-right-[-2%] bottom-[-3%] md:bottom-[-3%] w-[104px] md:w-[132px] lg:w-[186px] 2xl:w-[220px] min-[1920px]:w-[280px]"
           >
             <motion.img
               src="/images/deco-cuadrado.png"

@@ -87,12 +87,15 @@ const TracklistHoverVideo = forwardRef<HTMLDivElement, TracklistHoverVideoProps>
         <div className="bg-black p-0.5">
           <video
             ref={videoRef}
-            src={src}
+            src={`${src}#t=2`}
             muted
             playsInline
             loop
-            preload="none"
-            className="block max-h-[min(52vh,24rem)] w-auto max-w-[min(42vw,20rem)] object-contain sm:max-w-[min(38vw,22rem)] md:max-h-[min(50vh,26rem)] md:max-w-[min(34vw,24rem)] lg:max-h-[min(48vh,28rem)] lg:max-w-[min(30vw,26rem)] xl:max-w-[28rem]"
+            preload="auto"
+            onLoadedMetadata={(e) => {
+              e.currentTarget.currentTime = 2;
+            }}
+            className="block max-h-[min(52vh,24rem)] w-auto max-w-[min(42vw,20rem)] object-contain sm:max-w-[min(38vw,22rem)] md:max-h-[min(50vh,26rem)] md:max-w-[min(34vw,24rem)] lg:max-h-[min(48vh,28rem)] lg:max-w-[min(30vw,26rem)] xl:max-w-[28rem] 2xl:max-h-[min(55vh,32rem)] 2xl:max-w-[32rem] min-[1920px]:max-h-[min(60vh,40rem)] min-[1920px]:max-w-[40rem]"
           />
         </div>
       </motion.div>
@@ -141,7 +144,7 @@ function TracklistRow({
     const v = videoRef.current;
     if (!v) return;
     v.pause();
-    v.currentTime = 0;
+    v.currentTime = 2;
   };
 
   const otherRowHovered =
@@ -189,7 +192,7 @@ function TracklistRow({
         onClick={handleRowActivate}
         onKeyDown={handleRowKeyDown}
       >
-        <span className="font-sans text-sm font-medium tabular-nums sm:text-base md:text-lg">
+        <span className="font-sans text-sm font-medium tabular-nums sm:text-base md:text-lg 2xl:text-xl min-[1920px]:text-2xl">
           {track.number}
         </span>
 
@@ -212,7 +215,7 @@ function TracklistRow({
               onMouseEnter={handleEnter}
               onMouseLeave={handleLeave}
             >
-              <p className="inline-block font-sans text-base font-bold leading-tight sm:text-lg md:text-xl lg:text-3xl">
+              <p className="inline-block font-sans text-base font-bold leading-tight sm:text-lg md:text-xl lg:text-3xl 2xl:text-4xl min-[1920px]:text-5xl">
                 {track.title}
               </p>
               {track.feature ? (
@@ -237,7 +240,7 @@ function TracklistRow({
           </div>
         </div>
 
-        <span className="justify-self-end font-sans text-sm font-medium tabular-nums sm:text-base md:text-lg">
+        <span className="justify-self-end font-sans text-sm font-medium tabular-nums sm:text-base md:text-lg 2xl:text-xl min-[1920px]:text-2xl">
           {track.duration ?? "—"}
         </span>
       </motion.div>

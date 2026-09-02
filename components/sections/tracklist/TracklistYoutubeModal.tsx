@@ -18,7 +18,12 @@ function getFinalLayout() {
   }
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  let w = Math.min(vw * 0.92, 1100);
+  
+  // En resoluciones muy grandes (>= 1920), permitimos que el ancho máximo sea mucho mayor (ej. 1600px)
+  const isLargeScreen = vw >= 1920;
+  const maxAllowedWidth = isLargeScreen ? 1600 : 1100;
+  
+  let w = Math.min(vw * 0.92, maxAllowedWidth);
   let h = (w * 9) / 16;
   const maxH = vh * 0.9;
   if (h > maxH) {

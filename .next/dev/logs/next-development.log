@@ -6,3 +6,32 @@
 [00:00:45.067] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:00:45.578] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
 [00:00:49.529] Browser WARN    Autoplay prevenido por el navegador: {}
+[16:43:39.758] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[16:43:41.581] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[16:43:43.414] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[16:43:46.299] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[16:49:18.354] Server  LOG     ✓ Compiled in 948ms
+[16:51:50.850] Server  LOG     ✓ Compiled in 113ms
+[17:05:50.731] Server  LOG     ✓ Compiled in 189ms
+[17:05:51.703] Server  LOG     ✓ Compiled in 427ms
+[17:10:05.358] Server  LOG     ✓ Compiled in 639ms
+[17:15:43.280] Server  LOG     ✓ Compiled in 286ms
+[17:18:35.014] Server  LOG     ✓ Compiled in 95ms
+[17:20:22.447] Server  LOG     ✓ Compiled in 3.9s
+[17:21:27.223] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[17:21:27.739] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[17:22:14.596] Server  LOG     ✓ Compiled in 227ms
+[17:22:49.621] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[17:22:50.051] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[17:22:54.027] Browser WARN    Autoplay prevenido por el navegador: {}
+[17:24:39.537] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[17:24:39.894] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[17:24:43.829] Browser WARN    Autoplay prevenido por el navegador: {}
+[17:24:56.594] Server  LOG     ✓ Compiled in 118ms
+[17:24:56.823] Server  LOG     ✓ Compiled in 52ms
+[17:25:15.605] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[17:25:17.640] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[17:26:22.163] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[17:26:24.142] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[17:26:35.580] Browser WARN    Autoplay prevenido por el navegador: {}
+[17:27:50.533] Server  LOG     ✓ Compiled in 4.5s

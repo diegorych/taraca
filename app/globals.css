@@ -20,6 +20,11 @@
 }
 
 
+/* Global cursor hiding */
+* {
+  cursor: none !important;
+}
+
 body {
   position: relative;
   background-color: #0A0A0A;

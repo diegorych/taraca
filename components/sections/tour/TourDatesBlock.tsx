@@ -64,16 +64,16 @@ function TourDateRow({ event }: TourDateRowProps) {
       className="grid grid-cols-1 gap-4 border-b border-white/15 py-6 text-[#9FAEBE] sm:py-7 md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6 lg:gap-8"
     >
       <div className="min-w-0 md:justify-self-start">
-        <p className="font-sans text-xl font-bold uppercase tracking-[0.06em] sm:text-2xl md:text-2xl ">
+        <p className="font-sans text-xl font-bold uppercase tracking-[0.06em] sm:text-2xl md:text-2xl 2xl:text-3xl min-[1920px]:text-4xl">
           {locationLine}
         </p>
         <p
-          className={`mt-1 text-lg font-semibold sm:text-xl md:text-2xl  ${ebGaramondBoldItalic.className}`}
+          className={`mt-1 text-lg font-semibold sm:text-xl md:text-2xl 2xl:text-3xl min-[1920px]:text-4xl ${ebGaramondBoldItalic.className}`}
         >
           {event.venue}
         </p>
       </div>
-      <p className="w-full justify-self-center text-center font-sans text-xl font-bold tabular-nums sm:text-2xl md:w-auto md:px-2 md:text-2xl ">
+      <p className="w-full justify-self-center text-center font-sans text-xl font-bold tabular-nums sm:text-2xl md:w-auto md:px-2 md:text-2xl 2xl:text-3xl min-[1920px]:text-4xl">
         {dateLine}
       </p>
       <div className="flex flex-wrap gap-2 justify-self-end md:justify-end">
@@ -96,12 +96,16 @@ function TourDateRow({ event }: TourDateRowProps) {
   );
 }
 
+/** 1920+: the dates panel stops expanding at this width and stays centered. */
+const MAX_EXPANDED_PANEL_WIDTH_PX = 1850;
+
 export function TourDatesBlock({ events }: { events: TourEvent[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const baseWidthPx = useMotionValue(0);
   const bleedLeftPx = useMotionValue(0);
+  const viewportWidthPx = useMotionValue(0);
 
   useLayoutEffect(() => {
     const el = wrapperRef.current;
@@ -111,6 +115,7 @@ export function TourDatesBlock({ events }: { events: TourEvent[] }) {
       const r = el.getBoundingClientRect();
       baseWidthPx.set(r.width);
       bleedLeftPx.set(r.left);
+      viewportWidthPx.set(window.innerWidth);
     };
 
     sync();
@@ -122,7 +127,7 @@ export function TourDatesBlock({ events }: { events: TourEvent[] }) {
       ro.disconnect();
       window.removeEventListener("resize", sync);
     };
-  }, [baseWidthPx, bleedLeftPx]);
+  }, [baseWidthPx, bleedLeftPx, viewportWidthPx]);
 
   /** whileInView en el ul falla a menudo con antepasado transform (parallax); el área visible queda en 0 u off. */
   const datesInView = useInView(sectionRef, {
@@ -137,15 +142,23 @@ export function TourDatesBlock({ events }: { events: TourEvent[] }) {
     offset: ["start end", "start 12%"],
   });
 
-  const panelWidthPx = useTransform([scrollYProgress, baseWidthPx], ([p, bw]) => {
-    const vw = typeof window !== "undefined" ? window.innerWidth : 0;
-    const bwN = Number(bw);
-    return bwN + Number(p) * (vw - bwN);
-  });
+  const panelWidthPx = useTransform(
+    [scrollYProgress, baseWidthPx, viewportWidthPx],
+    ([p, bw, vw]) => {
+      const bwN = Number(bw);
+      const maxW = Math.min(Number(vw), MAX_EXPANDED_PANEL_WIDTH_PX);
+      return bwN + Number(p) * (Math.max(maxW, bwN) - bwN);
+    },
+  );
 
   const panelMarginLeftPx = useTransform(
-    [scrollYProgress, bleedLeftPx, baseWidthPx],
-    ([p, left, bw]) => (Number(bw) <= 0 ? 0 : -Number(p) * Number(left)),
+    [scrollYProgress, bleedLeftPx, baseWidthPx, viewportWidthPx],
+    ([p, left, bw, vw]) => {
+      if (Number(bw) <= 0) return 0;
+      const maxW = Math.min(Number(vw), MAX_EXPANDED_PANEL_WIDTH_PX);
+      const targetLeft = (Number(vw) - maxW) / 2;
+      return Number(p) * (targetLeft - Number(left));
+    },
   );
 
   return (

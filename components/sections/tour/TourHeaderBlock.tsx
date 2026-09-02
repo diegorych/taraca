@@ -67,7 +67,7 @@ export function TourHeaderBlock() {
         <img
           src="/images/tour-drexler-pose.png"
           alt=""
-          className="h-[700px] translate-y-[42%] object-contain object-bottom [filter:sepia(0.12)_contrast(1.05)]"
+          className="h-[700px] 2xl:h-[850px] min-[1920px]:h-[1050px] translate-y-[42%] object-contain object-bottom [filter:sepia(0.12)_contrast(1.05)]"
           loading="eager"
           decoding="async"
         />
@@ -75,7 +75,7 @@ export function TourHeaderBlock() {
 
       {/* Manuscrito detrás del título */}
       <motion.div
-        className="pointer-events-none absolute bottom-6 left-6 z-[4] h-[460px] w-[min(52vw,560px)] max-w-[95vw] -translate-x-[15%] -rotate-[3deg] will-change-transform md:bottom-0 md:left-10 lg:left-14"
+        className="pointer-events-none absolute bottom-6 left-6 z-[4] h-[460px] 2xl:h-[560px] min-[1920px]:h-[660px] w-[min(52vw,560px)] 2xl:w-[min(52vw,660px)] min-[1920px]:w-[min(52vw,860px)] max-w-[95vw] -translate-x-[15%] -rotate-[3deg] will-change-transform md:bottom-0 md:left-10 lg:left-14"
         style={{ y: manuscriptY }}
         aria-hidden
       >
@@ -89,7 +89,7 @@ export function TourHeaderBlock() {
 
       {/* Flecha: mismo y que el manuscrito; contenedor sin rotate (eje Y pantalla); hijo con inclinación */}
       <motion.div
-        className="pointer-events-none absolute left-[25%] top-[7%] z-[5] w-[580px] max-w-[92vw] lg:top-[-32%]"
+        className="pointer-events-none absolute left-[25%] top-[7%] z-[5] w-[580px] 2xl:w-[700px] min-[1920px]:w-[900px] max-w-[92vw] lg:top-[-32%]"
         style={{ y: manuscriptY }}
         aria-hidden
       >
@@ -107,13 +107,13 @@ export function TourHeaderBlock() {
 
       <motion.div
         ref={textContainerRef}
-        className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-col gap-6 px-6 pb-6 pt-8 will-change-transform md:flex-row md:items-end md:justify-between md:gap-8 md:px-10 md:pb-7 md:pt-10 lg:gap-10 lg:px-14 lg:pb-8"
+        className="relative z-10 mx-auto flex w-full max-w-[1600px] min-[1920px]:max-w-[2000px] flex-col gap-6 px-6 pb-6 pt-8 will-change-transform md:flex-row md:items-end md:justify-between md:gap-8 md:px-10 md:pb-7 md:pt-10 lg:gap-10 lg:px-14 lg:pb-8"
         style={{ y: titleRowY }}
       >
         <div className="relative z-[6] min-w-0 max-w-[min(100%,52rem)]">
           <div className="overflow-hidden pb-2">
             <motion.h2
-              className="font-serif text-[clamp(4rem,12vw,130px)] italic font-semibold leading-[0.9] tracking-tight text-white mb-4"
+              className="font-serif text-[clamp(4rem,10vw,200px)] italic font-semibold leading-[0.9] tracking-tight text-white mb-4"
               initial={textHiddenBottom}
               animate={textInView ? textVisibleFull : textHiddenBottom}
               transition={textRevealTransition(0.06)}
