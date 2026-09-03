@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useWrapPlainTextToLines } from "@/hooks/useWrapPlainTextToLines";
 
@@ -65,6 +66,7 @@ export function ManifestoDefinitionListItem({
   bodyClassName,
   baseDelay = 0,
 }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const lines = useWrapPlainTextToLines(measureRef, plainText, active);
   const [frozenLines, setFrozenLines] = useState<string[] | null>(null);
@@ -82,21 +84,26 @@ export function ManifestoDefinitionListItem({
     });
   }, [active, lines]);
 
+  useGSAP(() => {
+    if (!active || !frozenLines || frozenLines.length === 0) return;
+    
+    // Animate the number and the text lines together (Text Masking)
+    gsap.fromTo(
+      ".manifesto-num, .manifesto-line-text",
+      { y: "100%" },
+      {
+        y: "0%",
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.08,
+        delay: baseDelay,
+      }
+    );
+  }, { dependencies: [active, frozenLines], scope: containerRef });
+
   if (!active) return null;
 
   const displayLines = frozenLines ?? [];
-
-  const lineVariants = {
-    hidden: { opacity: 0 },
-    visible: (lineIdx: number) => ({
-      opacity: 1,
-      transition: {
-        duration: MANIFESTO_LINE_FADE_S,
-        delay: baseDelay + lineIdx * MANIFESTO_LINE_STAGGER_S,
-        ease: "easeOut" as const,
-      },
-    }),
-  };
 
   const renderLineContent = (line: string) => {
     if (boldWord && line.trimStart().startsWith(boldWord)) {
@@ -111,7 +118,7 @@ export function ManifestoDefinitionListItem({
   };
 
   return (
-    <div className="relative grid w-full grid-cols-[auto_minmax(0,1fr)] gap-x-4 md:gap-x-5 text-left text-[#ffffff]">
+    <div ref={containerRef} className="relative grid w-full grid-cols-[auto_minmax(0,1fr)] gap-x-4 md:gap-x-5 text-left text-[#ffffff]">
       <div
         ref={measureRef}
         className={`col-start-2 row-start-1 h-0 min-w-0 overflow-hidden opacity-0 ${bodyClassName}`}
@@ -120,29 +127,21 @@ export function ManifestoDefinitionListItem({
 
       {displayLines.length > 0 ? (
         <>
-          <motion.div
-            custom={0}
-            initial="hidden"
-            animate="visible"
-            variants={lineVariants}
-            className="self-start pt-[0.08em]"
+          <div
+            className="self-start pt-[0.08em] overflow-hidden"
             style={{ gridColumn: 1, gridRow: `1 / span ${displayLines.length}` }}
           >
-            <span className={numClassName}>{num}</span>
-          </motion.div>
+            <div className={`manifesto-num will-change-transform ${numClassName}`}>{num}</div>
+          </div>
 
           {displayLines.map((line, lineIdx) => (
-            <motion.div
+            <div
               key={`line-${lineIdx}-${line.slice(0, 20)}`}
-              custom={lineIdx}
-              initial="hidden"
-              animate="visible"
-              variants={lineVariants}
-              className="min-w-0"
+              className="min-w-0 overflow-hidden"
               style={{ gridColumn: 2, gridRow: lineIdx + 1 }}
             >
-              <p className={bodyClassName}>{renderLineContent(line)}</p>
-            </motion.div>
+              <p className={`manifesto-line-text will-change-transform ${bodyClassName}`}>{renderLineContent(line)}</p>
+            </div>
           ))}
         </>
       ) : null}

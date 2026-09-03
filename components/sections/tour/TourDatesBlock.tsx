@@ -97,7 +97,7 @@ function TourDateRow({ event }: TourDateRowProps) {
 }
 
 /** 1920+: the dates panel stops expanding at this width and stays centered. */
-const MAX_EXPANDED_PANEL_WIDTH_PX = 1850;
+const MAX_EXPANDED_PANEL_WIDTH_PX = 2200;
 
 export function TourDatesBlock({ events }: { events: TourEvent[] }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -169,7 +169,7 @@ export function TourDatesBlock({ events }: { events: TourEvent[] }) {
     >
       {/* Fondo transparente: el overflow del hero (foto) se ve en este tramo; el color lo da #gira */}
       <div className="relative z-10 bg-transparent pt-12 md:pt-16 lg:pt-20">
-        <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-14">
+        <div className="mx-auto w-full max-w-[1600px] min-[1920px]:max-w-[2000px] px-6 md:px-10 lg:px-14">
           <div ref={wrapperRef} className="w-full">
             <motion.div
               ref={panelRef}
@@ -227,7 +227,7 @@ export function TourDatesBlock({ events }: { events: TourEvent[] }) {
         </div>
       </div>
       <div
-        className="bg-white pb-12 md:pb-16 lg:pb-20"
+        className="bg-[#0A0A0A] h-24 md:h-32 lg:h-40"
         aria-hidden
       />
     </section>

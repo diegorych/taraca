@@ -9,7 +9,6 @@ import {
   useTransform,
 } from "framer-motion";
 import { AnimatedLogo } from "./AnimatedLogo";
-import { HeroMusicPlayer } from "./HeroMusicPlayer";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -106,6 +105,18 @@ export const Hero = () => {
     { clamp: true },
   );
 
+  const frameScale = useTransform(
+    scrollYProgress,
+    [0, 0.45],
+    [1, 0.94]
+  );
+  
+  const frameRadius = useTransform(
+    scrollYProgress,
+    [0, 0.45],
+    ["0px", "1.5rem"]
+  );
+
   useEffect(() => {
     setShowHeader(false);
 
@@ -126,12 +137,18 @@ export const Hero = () => {
 
   return (
     <section ref={containerRef} className="relative z-20 w-full h-[150vh] bg-[#0A0A0A]">
-      <div className="sticky top-0 h-dvh min-h-0 w-full">
-        {/* Reproductor de música arriba en el centro */}
-        <HeroMusicPlayer show={showDecor} />
-
+      <div 
+        className="sticky top-0 h-dvh min-h-0 w-full flex items-center justify-center overflow-hidden"
+      >
         {/* Fondo fijo + Drexler fijo al scroll; solo parallax del cursor en Drexler (opuesto al logo). */}
-        <div className="absolute inset-x-0 top-0 z-0 h-dvh w-full overflow-hidden">
+        <motion.div 
+          className="relative z-0 h-full w-full overflow-hidden"
+          style={{ 
+            borderRadius: frameRadius,
+            scale: frameScale,
+            transformOrigin: "center center"
+          }}
+        >
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: showBg ? 1 : 0 }}
@@ -152,7 +169,7 @@ export const Hero = () => {
             </div>
           </motion.div>
 
-          <div className="absolute inset-x-0 -top-[7%] h-[114%] overflow-hidden">
+          <div className="absolute -inset-[15px] overflow-hidden">
             <motion.div
               style={{
                 x: bgMouseX,
@@ -164,10 +181,10 @@ export const Hero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: showBg ? 1 : 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="absolute inset-0 origin-center scale-[1.06] will-change-transform"
+              className="absolute inset-0 origin-center will-change-transform"
             >
-              <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-0 pt-[2vh] md:pt-[3vh]">
-                <div className="relative h-[min(98svh,2800px)] w-[min(100vw,1000px)] origin-bottom scale-[1.06] sm:h-[min(98svh,3000px)] sm:w-[min(100vw,1180px)] sm:scale-[1.08] md:h-[min(99svh,3200px)] md:w-[min(100vw,1420px)] md:scale-[1.1] lg:h-[min(99svh,3400px)] lg:w-[min(100vw,1640px)] lg:scale-[1.12] xl:w-[min(100vw,1840px)] xl:scale-[1.14] 2xl:w-[min(100vw,1800px)] 2xl:scale-[1.12] min-[1920px]:w-[min(100vw,1800px)] min-[1920px]:scale-[1.1]">
+              <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-[15px] pt-[2vh] md:pt-[3vh]">
+                <div className="relative h-[min(93svh,2800px)] w-[min(100vw,1000px)] origin-bottom scale-[1.04] sm:h-[min(93svh,3000px)] sm:w-[min(100vw,1180px)] sm:scale-[1.05] md:h-[min(94svh,3200px)] md:w-[min(100vw,1420px)] md:scale-[1.06] lg:h-[min(94svh,3400px)] lg:w-[min(100vw,1640px)] lg:scale-[1.07] xl:w-[min(100vw,1840px)] xl:scale-[1.08] 2xl:w-[min(100vw,1800px)] 2xl:scale-[1.06] min-[1920px]:w-[min(100vw,1800px)] min-[1920px]:scale-[1.05]">
                   <Image
                     src="/images/hero-drexler-solo.png"
                     alt="Jorge Drexler"
@@ -183,8 +200,8 @@ export const Hero = () => {
             </motion.div>
           </div>
 
-          <div className="absolute inset-x-0 top-0 z-[2] h-dvh w-full bg-black/30 pointer-events-none" />
-        </div>
+          <div className="absolute inset-x-0 top-0 z-[2] h-full w-full bg-black/30 pointer-events-none" />
+        </motion.div>
 
         {/* Logo Layer: parallax + escala (sin fade por scroll) */}
         <motion.div

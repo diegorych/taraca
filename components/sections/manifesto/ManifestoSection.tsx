@@ -8,6 +8,8 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { EB_Garamond } from "next/font/google";
 import { Play } from "lucide-react";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
@@ -21,7 +23,7 @@ const ebGaramondMediumItalic = EB_Garamond({
 });
 
 /** Al pasar este progreso, arranca el bloque (texto + video del tambor). */
-const TEXT_TRIGGER_PROGRESS = 0.05;
+const TEXT_TRIGGER_PROGRESS = 0.04;
 
 /** Video primero; el texto entra después con este retraso (s) */
 const TEXT_AFTER_VIDEO_DELAY = 1.5;
@@ -30,48 +32,46 @@ const TEXT_FADE_IN_DURATION = 0.7;
 const numberedListNumClass =
   "shrink-0 w-8 md:w-10 pt-[0.08em] text-right font-sans font-normal tabular-nums text-[20px] leading-[1.45]";
 const numberedListBodyClass =
-  "min-w-0 flex-1 font-sans text-[20px] font-normal leading-[1.45] text-[#ffffff]";
+  "min-w-0 flex-1 font-sans text-[22px] md:text-[24px] font-normal leading-[1.35] text-[#ffffff]";
 
 const subtitleAlignWithListBodyClass = "pl-12 md:pl-[3.75rem]";
 
 const DEFINITION_1_PLAIN =
-  "Patrón rítmico:\nSonido del Tambor Chico: un golpe de mano acentuado (TA) seguido de dos golpes de palo (RA-CA).";
+  "Sonido del Tambor Chico: un golpe de mano acentuado (TA) seguido de dos golpes de palo (RA-CA).";
 
 const DEFINITION_2_PLAIN =
-  "Localización:\nAféresis de \u201cestar acá\u201d, utilizada en la zona del Río de la Plata como expresión de ubicación inmediata.";
+  "Aféresis de \u201cestar acá\u201d, utilizada en la zona del Río de la Plata como expresión de ubicación inmediata.";
 
-const TEXT_PARALLAX_START_PROGRESS = 0.82;
-const TEXT_PARALLAX_END_PROGRESS = 1;
+const TEXT_PARALLAX_START_PROGRESS = 0.0;
+const TEXT_PARALLAX_END_PROGRESS = 0.85;
 const TEXT_PARALLAX_SHIFT_PX = -30;
 const VIDEO_PARALLAX_SHIFT_PX = 6;
 
 /** El vídeo del tambor desaparece en este tramo. */
-const VIDEO_FADE_START_PROGRESS = 0.64;
-const VIDEO_FADE_END_PROGRESS = 0.74;
+const VIDEO_FADE_START_PROGRESS = 0.35;
+const VIDEO_FADE_END_PROGRESS = 0.45;
 
-/** Tras el tambor, entra el vídeo «estar acá» (mismo asset que la sección cinemática). */
-const SECOND_VIDEO_FADE_IN_START = VIDEO_FADE_END_PROGRESS;
-const SECOND_VIDEO_FADE_IN_END = 0.82;
+/** El texto se va hacia arriba y desaparece. */
+const MANIFESTO_TEXT_SCROLL_UP_START = 0.45;
+const MANIFESTO_TEXT_SCROLL_UP_END = 0.75;
+const MANIFESTO_TEXT_SHIFT_PX = -1000;
 
-/** Tras el fade-in, la máscara (gradiente) revela el vídeo ya a ancho completo. */
-const SECOND_VIDEO_EXPAND_START = SECOND_VIDEO_FADE_IN_END;
-const SECOND_VIDEO_EXPAND_END = 0.96;
+/** Tras el tambor, entra el vídeo «estar acá» desde abajo. */
+const SECOND_VIDEO_SLIDE_START = 0.45;
+const SECOND_VIDEO_SLIDE_END = 0.65;
 
-/** Transición suave del borde de la máscara (% del ancho del contenedor). */
-const ESTAR_VIDEO_MASK_FEATHER_PCT = 20;
+/** El vídeo «estar acá» escala de 90% a 100%. Empieza antes de aparecer. */
+const SECOND_VIDEO_SCALE_START = 0.35;
+const SECOND_VIDEO_SCALE_END = 0.80;
 
-/** Tras la 2.ª definición: más recorrido de scroll antes del fade-out del bloque de texto. */
-const MANIFESTO_TEXT_FADE_OUT_START = 0.84;
-const MANIFESTO_TEXT_FADE_OUT_END = 0.92;
-
-/** Overlay con botón play: entra cuando el texto ya terminó de desvanecerse. */
-const MANIFESTO_PLAY_OVERLAY_START = 0.92;
-const MANIFESTO_PLAY_OVERLAY_END = 0.985;
+/** Overlay con botón play: entra cuando el texto ya terminó de desvanecerse y el video escaló. */
+const MANIFESTO_PLAY_OVERLAY_START = 0.80;
+const MANIFESTO_PLAY_OVERLAY_END = 0.90;
 
 /** Por debajo de esto se resetea el overlay / audio del «estar acá». */
-const MANIFESTO_PLAY_RESET_PROGRESS = 0.74;
+const MANIFESTO_PLAY_RESET_PROGRESS = 0.40;
 
-const MANIFESTO_SCROLL_HEIGHT_VH = 425;
+const MANIFESTO_SCROLL_HEIGHT_VH = 300;
 
 /** Anticipar reproducción ~1s antes del fade-in (mapeado scroll ≈ px/s sobre el tramo del manifiesto). */
 const ESTAR_VIDEO_PLAY_PREROLL_MS = 1000;
@@ -90,8 +90,6 @@ export function ManifestoSection() {
   const estarVideoStartedRef = useRef(false);
   const playOverlayDismissed = useMotionValue(0);
   const [youtubeOpen, setYoutubeOpen] = useState(false);
-  /** Alineado con `w-[58%] md:w-[60%]` de la columna del tambor. */
-  const estarVideoNarrowPctRef = useRef(58);
   /** ~px recorridos en el eje de scroll para progress 0→1 (offset start/end del manifiesto). */
   const manifestoScrollRangePxRef = useRef(8000);
 
@@ -111,16 +109,6 @@ export function ManifestoSection() {
       ro.disconnect();
       window.removeEventListener("resize", syncRange);
     };
-  }, []);
-
-  useLayoutEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const sync = () => {
-      estarVideoNarrowPctRef.current = mq.matches ? 60 : 58;
-    };
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
   }, []);
 
   const { scrollYProgress } = useScroll({
@@ -147,60 +135,37 @@ export function ManifestoSection() {
     { clamp: true },
   );
 
-  const estarVideoOpacity = useTransform(
+  const estarVideoY = useTransform(
     scrollYProgress,
-    [
-      SECOND_VIDEO_FADE_IN_START,
-      SECOND_VIDEO_FADE_IN_END,
-      1,
-    ],
-    [0, 1, 1],
-    { clamp: true },
+    [SECOND_VIDEO_SLIDE_START, SECOND_VIDEO_SLIDE_END],
+    ["100%", "0%"],
+    { clamp: true }
   );
 
-  /**
-   * Vídeo a ancho completo; el scroll desplaza un borde suave (mask-image en lugar de clip-path recto).
-   */
-  const estarVideoMaskGradient = useTransform(scrollYProgress, (p) => {
-    const narrowPct = estarVideoNarrowPctRef.current;
-    const leftInsetMax = 100 - narrowPct;
-    const F = ESTAR_VIDEO_MASK_FEATHER_PCT;
+  const estarVideoScale = useTransform(
+    scrollYProgress,
+    [SECOND_VIDEO_SCALE_START, SECOND_VIDEO_SCALE_END],
+    [0.9, 1],
+    { clamp: true }
+  );
 
-    const softMask = (edgePct: number) => {
-      if (edgePct <= 0.25) {
-        return "linear-gradient(to right, #000 0%, #000 100%)";
-      }
-      const fadeStart = Math.max(0, edgePct - F);
-      const fadeEnd = Math.min(100, edgePct + F * 0.4);
-      return `linear-gradient(to right, transparent 0%, transparent ${fadeStart}%, #000 ${fadeEnd}%, #000 100%)`;
-    };
-
-    if (prefersReducedMotion === true) {
-      return "none";
-    }
-    if (p < SECOND_VIDEO_EXPAND_START) {
-      return softMask(leftInsetMax);
-    }
-    if (p >= SECOND_VIDEO_EXPAND_END) {
-      return "none";
-    }
-    const t =
-      (p - SECOND_VIDEO_EXPAND_START) /
-      (SECOND_VIDEO_EXPAND_END - SECOND_VIDEO_EXPAND_START);
-    const edge = leftInsetMax * (1 - t);
-    return softMask(edge);
-  });
+  const estarVideoRadius = useTransform(
+    scrollYProgress,
+    [SECOND_VIDEO_SCALE_START, SECOND_VIDEO_SCALE_END],
+    ["2rem", "0rem"],
+    { clamp: true }
+  );
 
   const textBlockScrollOpacity = useTransform(scrollYProgress, (p) => {
-    if (p < MANIFESTO_TEXT_FADE_OUT_START) return 1;
+    if (p < MANIFESTO_TEXT_SCROLL_UP_START) return 1;
     if (prefersReducedMotion === true) {
-      return p >= MANIFESTO_TEXT_FADE_OUT_END ? 0 : 1;
+      return p >= MANIFESTO_TEXT_SCROLL_UP_END ? 0 : 1;
     }
-    if (p >= MANIFESTO_TEXT_FADE_OUT_END) return 0;
+    if (p >= MANIFESTO_TEXT_SCROLL_UP_END) return 0;
     return (
       1 -
-      (p - MANIFESTO_TEXT_FADE_OUT_START) /
-        (MANIFESTO_TEXT_FADE_OUT_END - MANIFESTO_TEXT_FADE_OUT_START)
+      (p - MANIFESTO_TEXT_SCROLL_UP_START) /
+        (MANIFESTO_TEXT_SCROLL_UP_END - MANIFESTO_TEXT_SCROLL_UP_START)
     );
   });
 
@@ -226,9 +191,37 @@ export function ManifestoSection() {
 
   const textBlockY = useTransform(
     scrollYProgress,
-    [TEXT_PARALLAX_START_PROGRESS, TEXT_PARALLAX_END_PROGRESS],
-    [0, TEXT_PARALLAX_SHIFT_PX],
+    [MANIFESTO_TEXT_SCROLL_UP_START, MANIFESTO_TEXT_SCROLL_UP_END],
+    [0, MANIFESTO_TEXT_SHIFT_PX],
     { clamp: true },
+  );
+
+  const titleParallaxY = useTransform(
+    scrollYProgress,
+    [MANIFESTO_TEXT_SCROLL_UP_START, MANIFESTO_TEXT_SCROLL_UP_END],
+    [0, MANIFESTO_TEXT_SHIFT_PX * 1.08],
+    { clamp: true }
+  );
+
+  const subtitleParallaxY = useTransform(
+    scrollYProgress,
+    [MANIFESTO_TEXT_SCROLL_UP_START, MANIFESTO_TEXT_SCROLL_UP_END],
+    [0, MANIFESTO_TEXT_SHIFT_PX * 1.04],
+    { clamp: true }
+  );
+
+  const def1ParallaxY = useTransform(
+    scrollYProgress,
+    [MANIFESTO_TEXT_SCROLL_UP_START, MANIFESTO_TEXT_SCROLL_UP_END],
+    [0, MANIFESTO_TEXT_SHIFT_PX * 0.96],
+    { clamp: true }
+  );
+
+  const def2ParallaxY = useTransform(
+    scrollYProgress,
+    [MANIFESTO_TEXT_SCROLL_UP_START, MANIFESTO_TEXT_SCROLL_UP_END],
+    [0, MANIFESTO_TEXT_SHIFT_PX * 0.92],
+    { clamp: true }
   );
 
   const videoParallaxY = useTransform(
@@ -251,7 +244,8 @@ export function ManifestoSection() {
     } else {
       setBlockPhase(1);
     }
-    setShowDefinition2(progress >= 0.45);
+    // Mostramos la segunda definición al mismo tiempo que el resto del bloque
+    setShowDefinition2(progress >= TEXT_TRIGGER_PROGRESS);
 
     const rangePx = manifestoScrollRangePxRef.current;
     const leadProgress = Math.min(
@@ -262,7 +256,7 @@ export function ManifestoSection() {
     );
     const estarPlayProgress = Math.max(
       VIDEO_FADE_START_PROGRESS + 0.04,
-      SECOND_VIDEO_FADE_IN_START - leadProgress,
+      SECOND_VIDEO_SLIDE_START - leadProgress,
     );
     const estarHysteresis = Math.max(0.01, leadProgress * 0.35);
 
@@ -327,11 +321,24 @@ export function ManifestoSection() {
 
   const scene1Active = blockPhase === 1;
 
-  const titleDelay = TEXT_AFTER_VIDEO_DELAY;
-  const blockGapS = 0.45;
-  const subtitleDelay = titleDelay + 0.45;
-  const def1Delay = subtitleDelay + blockGapS;
-  const def2Delay = 0.04;
+  const textContainerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (scene1Active) {
+      gsap.fromTo(
+        ".manifesto-title-text",
+        { y: "100%" },
+        { y: "0%", duration: 0.8, ease: "power3.out", delay: 0.2 }
+      );
+      gsap.fromTo(
+        ".manifesto-subtitle-text",
+        { y: "100%" },
+        { y: "0%", duration: 0.8, ease: "power3.out", delay: 0.3 }
+      );
+    } else {
+      gsap.set(".manifesto-title-text, .manifesto-subtitle-text", { y: "100%" });
+    }
+  }, { dependencies: [scene1Active], scope: textContainerRef });
 
   return (
     <section
@@ -364,21 +371,17 @@ export function ManifestoSection() {
             </motion.div>
 
             <motion.div
-              className="absolute inset-x-0 top-0 z-[11] h-full w-full overflow-hidden"
+              className="absolute inset-x-0 top-0 z-[11] h-full w-full overflow-hidden flex items-center justify-center"
               style={{
-                opacity: estarVideoOpacity,
-                y: videoParallaxY,
+                y: estarVideoY,
               }}
             >
               <motion.div
-                className="relative h-full w-full will-change-[mask-image]"
+                className="relative h-full w-full overflow-hidden"
                 style={{
-                  maskImage: estarVideoMaskGradient,
-                  WebkitMaskImage: estarVideoMaskGradient,
-                  maskSize: "100% 100%",
-                  maskRepeat: "no-repeat",
-                  WebkitMaskSize: "100% 100%",
-                  WebkitMaskRepeat: "no-repeat",
+                  scale: estarVideoScale,
+                  borderRadius: estarVideoRadius,
+                  transformOrigin: "center center",
                 }}
               >
                 <video
@@ -403,68 +406,51 @@ export function ManifestoSection() {
 
           <div className="relative z-20 mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-14">
             <motion.div
+              ref={textContainerRef}
               className="relative flex min-h-[200px] w-full flex-col justify-start text-left will-change-transform md:max-w-[min(40vw,34rem)] lg:max-w-[min(40vw,36rem)]"
-              style={{ y: textBlockY, opacity: textBlockScrollOpacity }}
+              style={{ opacity: textBlockScrollOpacity }}
             >
-              <motion.div className="flex flex-col items-start justify-start">
-                <motion.div
-                  className={`w-full ${block1Title.wrapperClass ?? ""}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: scene1Active ? 1 : 0 }}
-                  transition={{
-                    duration: TEXT_FADE_IN_DURATION,
-                    ease: "easeOut",
-                    delay: titleDelay,
-                  }}
-                >
-                  <div className={block1Title.className}>{block1Title.text}</div>
+              <div className="flex flex-col items-start justify-start">
+                <motion.div style={{ y: titleParallaxY }} className={`w-full overflow-hidden ${block1Title.wrapperClass ?? ""}`}>
+                  <div className={`manifesto-title-text will-change-transform ${block1Title.className}`}>{block1Title.text}</div>
                 </motion.div>
-                <motion.div
-                  className={`w-full ${block1Subtitle.wrapperClass ?? ""}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: scene1Active ? 1 : 0 }}
-                  transition={{
-                    duration: TEXT_FADE_IN_DURATION,
-                    ease: "easeOut",
-                    delay: subtitleDelay,
-                  }}
-                >
-                  <div className={block1Subtitle.className}>{block1Subtitle.text}</div>
+                <motion.div style={{ y: subtitleParallaxY }} className={`w-full overflow-hidden ${block1Subtitle.wrapperClass ?? ""}`}>
+                  <div className={`manifesto-subtitle-text will-change-transform ${block1Subtitle.className}`}>{block1Subtitle.text}</div>
                 </motion.div>
-              </motion.div>
+              </div>
 
-              <motion.div className="mt-10 flex w-full max-w-[min(100%,22rem)] flex-col gap-y-6 md:mt-12 md:max-w-[min(100%,28rem)] md:gap-y-8">
-                <div className="w-full">
+              <div className="mt-10 flex w-full max-w-[min(100%,22rem)] flex-col gap-y-6 md:mt-12 md:max-w-[min(100%,32rem)] md:gap-y-8">
+                <motion.div style={{ y: def1ParallaxY }} className="w-full">
                   <ManifestoDefinitionListItem
                     key="def-1"
                     num="1."
                     plainText={DEFINITION_1_PLAIN}
-                    boldWord="Patrón rítmico:"
+                    boldWord=""
                     active={blockPhase === 1}
                     numClassName={numberedListNumClass}
                     bodyClassName={numberedListBodyClass}
-                    baseDelay={def1Delay}
+                    baseDelay={1.2}
                   />
-                </div>
-                <div className="w-full">
+                </motion.div>
+                <motion.div style={{ y: def2ParallaxY }} className="w-full">
                   <ManifestoDefinitionListItem
                     key="def-2"
                     num="2."
                     plainText={DEFINITION_2_PLAIN}
-                    boldWord="Localización:"
+                    boldWord=""
                     active={blockPhase === 1 && showDefinition2}
                     numClassName={numberedListNumClass}
                     bodyClassName={numberedListBodyClass}
-                    baseDelay={def2Delay}
+                    baseDelay={1.6}
                   />
-                </div>
-              </motion.div>
+                </motion.div>
+              </div>
             </motion.div>
           </div>
 
           <motion.div
             className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center px-4"
-            style={{ opacity: playOverlayOpacity }}
+            style={{ y: estarVideoY }}
           >
             <div className="flex max-w-[min(100%,56rem)] flex-col items-center text-center">
               <h2
