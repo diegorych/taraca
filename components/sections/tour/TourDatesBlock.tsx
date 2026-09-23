@@ -179,19 +179,6 @@ export function TourDatesBlock({ events }: { events: TourEvent[] }) {
                 marginLeft: panelMarginLeftPx,
               }}
             >
-              <div
-                className="absolute inset-0 bg-fixed bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: "url('/images/bg-tour-dates.png')",
-                  backgroundColor: "#152238",
-                }}
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute inset-0 bg-[#0f1a2e]/35"
-                aria-hidden
-              />
-
               <div className="relative z-10 px-6 py-10 md:px-10 md:py-12 lg:px-14 lg:py-14">
                 <h3 id="gira-dates-heading" className="sr-only">
                   Fechas de la gira

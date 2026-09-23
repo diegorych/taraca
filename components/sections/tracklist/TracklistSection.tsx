@@ -1,7 +1,5 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { EB_Garamond } from "next/font/google";
 import {
@@ -49,8 +47,8 @@ const headerFooterTransition = {
 };
 
 const rowSweepFromBottom = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0 },
 };
 
 /** Hover preview: sin máscara de recorte para que el video nunca se vea “cortado”. */
@@ -134,24 +132,6 @@ function TracklistRow({
   /** Pares: vídeo a la derecha del eje del título; impares: a la izquierda */
   const videoOnRight = index % 2 === 0;
 
-  useGSAP(() => {
-    if (rowInView) {
-      gsap.fromTo(
-        ".tracklist-text-mask",
-        { y: "100%" },
-        {
-          y: "0%",
-          duration: 0.8,
-          ease: "power3.out",
-          stagger: 0.05,
-          delay: Math.min(index * 0.05, 0.24),
-        }
-      );
-    } else {
-      gsap.set(".tracklist-text-mask", { y: "100%" });
-    }
-  }, { dependencies: [rowInView], scope: rowRef });
-
   const handleEnter = () => {
     onHoverStart(track.id);
     const v = videoRef.current;
@@ -212,11 +192,9 @@ function TracklistRow({
         onClick={handleRowActivate}
         onKeyDown={handleRowKeyDown}
       >
-        <div className="overflow-hidden">
-          <span className="tracklist-text-mask block font-sans text-sm font-medium tabular-nums sm:text-base md:text-lg 2xl:text-xl min-[1920px]:text-2xl will-change-transform">
-            {track.number}
-          </span>
-        </div>
+        <span className="font-sans text-sm font-medium tabular-nums sm:text-base md:text-lg 2xl:text-xl min-[1920px]:text-2xl">
+          {track.number}
+        </span>
 
         {/* Hueco número–título | título | hueco título–duración: el preview va centrado en el hueco (escalonado) */}
         <div className="relative min-w-0 overflow-visible lg:px-2">
@@ -237,19 +215,15 @@ function TracklistRow({
               onMouseEnter={handleEnter}
               onMouseLeave={handleLeave}
             >
-              <div className="overflow-hidden">
-                <p className="tracklist-text-mask block font-sans text-base font-bold leading-tight sm:text-lg md:text-xl lg:text-3xl 2xl:text-4xl min-[1920px]:text-5xl will-change-transform">
-                  {track.title}
-                </p>
-              </div>
+              <p className="inline-block font-sans text-base font-bold leading-tight sm:text-lg md:text-xl lg:text-3xl 2xl:text-4xl min-[1920px]:text-5xl">
+                {track.title}
+              </p>
               {track.feature ? (
-                <div className="overflow-hidden mt-1">
-                  <p
-                    className={`tracklist-text-mask block text-sm text-[#A64D3D]/95 sm:text-base md:text-3xl ${ebGaramondItalic.className} will-change-transform`}
-                  >
-                    {track.feature}
-                  </p>
-                </div>
+                <p
+                  className={`mt-1 text-sm text-[#A64D3D]/95 sm:text-base md:text-3xl ${ebGaramondItalic.className}`}
+                >
+                  {track.feature}
+                </p>
               ) : null}
             </div>
 
@@ -266,46 +240,10 @@ function TracklistRow({
           </div>
         </div>
 
-        <div className="overflow-hidden justify-self-end">
-          <span className="tracklist-text-mask block font-sans text-sm font-medium tabular-nums sm:text-base md:text-lg 2xl:text-xl min-[1920px]:text-2xl will-change-transform">
-            {track.duration ?? "—"}
-          </span>
-        </div>
-      </motion.div>
-    </li>
-  );
-}
-
-function TracklistBHeader() {
-  const ref = useRef<HTMLLIElement>(null);
-  const inView = useInView(ref, trackRowViewport);
-
-  useGSAP(() => {
-    if (inView) {
-      gsap.fromTo(
-        ".tracklist-b-mask",
-        { y: "100%" },
-        { y: "0%", duration: 0.8, ease: "power3.out" }
-      );
-    } else {
-      gsap.set(".tracklist-b-mask", { y: "100%" });
-    }
-  }, { dependencies: [inView], scope: ref });
-
-  return (
-    <li
-      ref={ref}
-      className={`grid min-h-[5.5rem] grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center py-5 text-[#A64D3D] sm:grid-cols-[3rem_minmax(0,1fr)_auto] md:min-h-[6.25rem] md:grid-cols-[4rem_minmax(0,1fr)_auto] md:py-7 lg:min-h-[6.75rem] lg:grid-cols-[minmax(4.5rem,5.5rem)_minmax(0,1fr)_minmax(3.5rem,auto)] lg:py-8`}
-    >
-      <span />
-      <span />
-      <div className="overflow-hidden justify-self-end">
-        <span
-          className={`tracklist-b-mask block text-[40px] leading-none ${ebGaramond.className} will-change-transform`}
-        >
-          B
+        <span className="justify-self-end font-sans text-sm font-medium tabular-nums sm:text-base md:text-lg 2xl:text-xl min-[1920px]:text-2xl">
+          {track.duration ?? "—"}
         </span>
-      </div>
+      </motion.div>
     </li>
   );
 }
@@ -351,21 +289,6 @@ export function TracklistSection() {
   const panelWidth = useTransform(scrollYProgress, [0, 1], ["100%", "89%"]);
   const panelRadius = useTransform(scrollYProgress, [0, 1], ["0px", "8px"]);
 
-  const tracklistHeaderRef = useRef<HTMLDivElement>(null);
-  const tracklistHeaderInView = useInView(tracklistHeaderRef, tracklistViewport);
-
-  useGSAP(() => {
-    if (tracklistHeaderInView) {
-      gsap.fromTo(
-        ".tracklist-header-mask",
-        { y: "100%" },
-        { y: "0%", duration: 0.8, ease: "power3.out", stagger: 0.1 }
-      );
-    } else {
-      gsap.set(".tracklist-header-mask", { y: "100%" });
-    }
-  }, { dependencies: [tracklistHeaderInView], scope: tracklistHeaderRef });
-
   return (
     <section
       ref={tracklistSectionRef}
@@ -402,21 +325,16 @@ export function TracklistSection() {
             style={{ y: contentY }}
           >
             <motion.div
-              ref={tracklistHeaderRef}
               className={`grid grid-cols-[minmax(0,1fr)_auto] items-center pb-5 text-[#A64D3D] md:pb-7 lg:pb-8 ${ebGaramond.className}`}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={tracklistViewport}
               transition={headerFooterTransition}
             >
-              <div className="overflow-hidden">
-                <p className={`tracklist-header-mask text-[40px] leading-none ${ebGaramondItalic.className} will-change-transform`}>
-                  Taracá
-                </p>
-              </div>
-              <div className="overflow-hidden">
-                <p className="tracklist-header-mask text-[40px] leading-none will-change-transform">A</p>
-              </div>
+              <p className={`text-[40px] leading-none ${ebGaramondItalic.className}`}>
+                Taracá
+              </p>
+              <p className="text-[40px] leading-none">A</p>
             </motion.div>
 
             <ol className="list-none overflow-visible">
@@ -434,7 +352,17 @@ export function TracklistSection() {
                     }
                   />
                   {track.id === "05" ? (
-                    <TracklistBHeader />
+                    <li
+                      className={`grid min-h-[5.5rem] grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center py-5 text-[#A64D3D] sm:grid-cols-[3rem_minmax(0,1fr)_auto] md:min-h-[6.25rem] md:grid-cols-[4rem_minmax(0,1fr)_auto] md:py-7 lg:min-h-[6.75rem] lg:grid-cols-[minmax(4.5rem,5.5rem)_minmax(0,1fr)_minmax(3.5rem,auto)] lg:py-8`}
+                    >
+                      <span />
+                      <span />
+                      <span
+                        className={`justify-self-end text-[40px] leading-none ${ebGaramond.className}`}
+                      >
+                        B
+                      </span>
+                    </li>
                   ) : null}
                 </Fragment>
               ))}

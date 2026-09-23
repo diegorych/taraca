@@ -20,16 +20,34 @@
 }
 
 
-/* Global cursor hiding */
-* {
-  cursor: none !important;
-}
-
 body {
   position: relative;
   background-color: #0A0A0A;
   color: var(--foreground);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  cursor: auto;
+}
+
+html,
+a,
+button,
+[role="button"],
+input,
+select,
+textarea,
+label {
+  cursor: auto;
+}
+
+a[href],
+button:not(:disabled),
+[role="button"],
+[type="button"],
+[type="submit"],
+label[for],
+select,
+summary {
+  cursor: pointer;
 }
 
 /* Film Grain / Noise Overlay */
