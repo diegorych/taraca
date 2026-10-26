@@ -43,6 +43,7 @@ export function EstarAcaYoutubeEmbed({ open, onClose }: EstarAcaYoutubeEmbedProp
 
   return (
     <div
+      data-story-scroll-pause
       className="absolute inset-0 z-[60] flex flex-col bg-[#0A0A0A]/96"
       role="dialog"
       aria-modal="true"

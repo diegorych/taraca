@@ -4,6 +4,7 @@ import { TracklistSection } from "@/components/sections/tracklist/TracklistSecti
 import { TourSection } from "@/components/sections/tour/TourSection";
 import { MerchSection } from "@/components/sections/merch/MerchSection";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { StoryScroll } from "@/components/features/StoryScroll";
 import type { TourEvent } from "@/lib/domain";
 
 type HomePageSectionsProps = {
@@ -13,6 +14,7 @@ type HomePageSectionsProps = {
 export function HomePageSections({ tourEvents }: HomePageSectionsProps) {
   return (
     <main className="min-h-screen relative bg-[#0A0A0A]">
+      <StoryScroll />
       <HeroSection />
       <ManifestoSection />
       <TracklistSection />

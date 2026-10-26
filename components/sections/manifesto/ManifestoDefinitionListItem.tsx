@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, type MotionStyle } from "framer-motion";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useLayoutEffect, useRef, useState } from "react";
@@ -55,7 +56,36 @@ type Props = {
   bodyClassName: string;
   /** Retraso de la primera línea (y del número) */
   baseDelay?: number;
+  /** Frase del texto que se anima aparte del resto (puede quedar partida entre líneas). */
+  highlight?: string;
+  /** Estilo del número y del texto que no es `highlight`. */
+  restStyle?: MotionStyle;
+  /** Estilo de la frase `highlight`. */
+  highlightStyle?: MotionStyle;
 };
+
+type Range = [start: number, end: number];
+type Segment = { text: string; bold: boolean; highlighted: boolean };
+
+const inRange = (i: number, [start, end]: Range) => i >= start && i < end;
+
+/**
+ * Parte una línea (que empieza en `lineStart` dentro del texto) en tramos según caigan
+ * dentro de la entrada en negrita y/o de la frase resaltada.
+ */
+function splitLine(line: string, lineStart: number, bold: Range, highlight: Range): Segment[] {
+  const lineEnd = lineStart + line.length;
+  const cuts = new Set([lineStart, lineEnd]);
+  for (const edge of [...bold, ...highlight]) {
+    if (edge > lineStart && edge < lineEnd) cuts.add(edge);
+  }
+  const points = [...cuts].sort((a, b) => a - b);
+  return points.slice(0, -1).map((start, i) => ({
+    text: line.slice(start - lineStart, points[i + 1] - lineStart),
+    bold: inRange(start, bold),
+    highlighted: inRange(start, highlight),
+  }));
+}
 
 export function ManifestoDefinitionListItem({
   num,
@@ -65,6 +95,9 @@ export function ManifestoDefinitionListItem({
   numClassName,
   bodyClassName,
   baseDelay = 0,
+  highlight,
+  restStyle,
+  highlightStyle,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
@@ -87,15 +120,14 @@ export function ManifestoDefinitionListItem({
   useGSAP(() => {
     if (!active || !frozenLines || frozenLines.length === 0) return;
     
-    // Animate the number and the text lines together (Text Masking)
+    // Número y líneas aparecen juntos con un fade (sin desplazamiento)
     gsap.fromTo(
       ".manifesto-num, .manifesto-line-text",
-      { y: "100%" },
+      { opacity: 0 },
       {
-        y: "0%",
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.08,
+        opacity: 1,
+        duration: 1.1,
+        ease: "power2.out",
         delay: baseDelay,
       }
     );
@@ -105,17 +137,31 @@ export function ManifestoDefinitionListItem({
 
   const displayLines = frozenLines ?? [];
 
-  const renderLineContent = (line: string) => {
-    if (boldWord && line.trimStart().startsWith(boldWord)) {
-      return (
-        <>
-          <span className="font-bold">{boldWord}</span>
-          <span>{line.slice(boldWord.length)}</span>
-        </>
-      );
-    }
-    return line;
-  };
+  // Cada línea es un tramo del texto (palabras unidas por un espacio): se ubica en orden.
+  const lineStarts = displayLines.reduce<number[]>((starts, line, i) => {
+    const from = i === 0 ? 0 : starts[i - 1] + displayLines[i - 1].length;
+    const found = plainText.indexOf(line, from);
+    starts.push(found >= 0 ? found : from);
+    return starts;
+  }, []);
+  // La entrada en negrita es el comienzo del texto (p. ej. «Sonido del Tambor Chico:»).
+  const boldRange: Range =
+    boldWord && plainText.startsWith(boldWord) ? [0, boldWord.length] : [-1, -1];
+  const hlStart = highlight ? plainText.indexOf(highlight) : -1;
+  const highlightRange: Range =
+    hlStart >= 0 && highlight ? [hlStart, hlStart + highlight.length] : [-1, -1];
+
+  const renderLineContent = (line: string, lineIdx: number) =>
+    splitLine(line, lineStarts[lineIdx], boldRange, highlightRange).map((seg, i) => (
+      <motion.span
+        key={i}
+        className={seg.bold ? "font-bold" : undefined}
+        data-manifesto-highlight={seg.highlighted || undefined}
+        style={seg.highlighted ? highlightStyle : restStyle}
+      >
+        {seg.text}
+      </motion.span>
+    ));
 
   return (
     <div ref={containerRef} className="relative grid w-full grid-cols-[auto_minmax(0,1fr)] gap-x-4 md:gap-x-5 text-left text-[#ffffff]">
@@ -131,7 +177,10 @@ export function ManifestoDefinitionListItem({
             className="self-start pt-[0.08em] overflow-hidden"
             style={{ gridColumn: 1, gridRow: `1 / span ${displayLines.length}` }}
           >
-            <div className={`manifesto-num will-change-transform ${numClassName}`}>{num}</div>
+            {/* La entrada (GSAP) anima .manifesto-num; el fundido por scroll va en el envoltorio. */}
+            <motion.div style={restStyle}>
+              <div className={`manifesto-num ${numClassName}`}>{num}</div>
+            </motion.div>
           </div>
 
           {displayLines.map((line, lineIdx) => (
@@ -140,7 +189,7 @@ export function ManifestoDefinitionListItem({
               className="min-w-0 overflow-hidden"
               style={{ gridColumn: 2, gridRow: lineIdx + 1 }}
             >
-              <p className={`manifesto-line-text will-change-transform ${bodyClassName}`}>{renderLineContent(line)}</p>
+              <p className={`manifesto-line-text ${bodyClassName}`}>{renderLineContent(line, lineIdx)}</p>
             </div>
           ))}
         </>
