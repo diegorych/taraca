@@ -7,15 +7,13 @@ import {
   useReducedMotion,
   useScroll,
   useTransform,
+  type MotionValue,
 } from "framer-motion";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { EB_Garamond } from "next/font/google";
 import { Play } from "lucide-react";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { EstarAcaYoutubeEmbed } from "@/components/features/EstarAcaYoutubeEmbed";
 import { ManifestoDefinitionListItem } from "./ManifestoDefinitionListItem";
-import { ManifestoWordMorph } from "./ManifestoWordMorph";
 import { ClaveStaff } from "./ClaveStaff";
 
 const ebGaramondMediumItalic = EB_Garamond({
@@ -24,12 +22,26 @@ const ebGaramondMediumItalic = EB_Garamond({
   style: "italic",
 });
 
-/** Al pasar este progreso, arranca el bloque (texto + video del tambor). */
-const TEXT_TRIGGER_PROGRESS = 0.04;
+const MANIFESTO_SCROLL_HEIGHT_VH = 350;
+/** Recorrido de scroll de la sección (vh): su alto menos la pantalla fija. */
+const MANIFESTO_RANGE_VH = MANIFESTO_SCROLL_HEIGHT_VH - 100;
+/** La línea de tiempo se escribe en vh de scroll dentro de la sección → progreso 0–1. */
+const at = (scrollVh: number) => scrollVh / MANIFESTO_RANGE_VH;
+const span = (fromVh: number, toVh: number): [number, number] => [at(fromVh), at(toVh)];
 
-/** Video primero; el texto entra después con este retraso (s) */
-const TEXT_AFTER_VIDEO_DELAY = 1.5;
-const TEXT_FADE_IN_DURATION = 0.7;
+/** Al pasar este punto se monta el bloque y aparece el video del tambor. */
+const TEXT_TRIGGER_PROGRESS = at(8);
+
+/**
+ * Entrada con el scroll, un elemento por vez: título (y subtítulo), definición 1,
+ * definición 2 y pentagrama, cada uno con un fade y un leve blur. Después la escena
+ * queda quieta hasta que empieza la salida.
+ */
+const TITLE_FADE_IN = span(6, 22);
+const SUBTITLE_FADE_IN = span(12, 28);
+const DEF1_FADE_IN = span(26, 44);
+const DEF2_FADE_IN = span(42, 60);
+const STAFF_FADE_IN = span(58, 76);
 
 /** Párrafos a 22px; crecen recién en pantallas grandes (≥1536, ≥1920, ≥2560px). */
 const manifestoParagraphSizeClass =
@@ -49,58 +61,47 @@ const DEFINITION_2_LEAD = "Aféresis de \u201cestar acá\u201d:";
 const DEFINITION_2_PLAIN = `${DEFINITION_2_LEAD}\nUtilizada en la zona del Río de la Plata como expresión de ubicación inmediata.`;
 
 /**
- * Transición tambor → «estar acá»: se van el tambor y los textos, queda sola la segunda
- * definición; «estar acá» se ilumina mientras el resto de la frase se apaga, y esas
- * palabras viajan y crecen hasta «Estar acá» del título del video (cambiando de
- * tipografía) mientras aparece el video. Después entra el resto del título y el play.
+ * Transición al video «estar acá» como un scroll normal: el video sube desde abajo a la
+ * misma velocidad que el scroll (cubre la pantalla en exactamente 100vh). Para que se
+ * sienta natural y con profundidad, el manifiesto sube más lento por detrás (parallax) y
+ * se oscurece de a poco, el borde del video proyecta una sombra suave y la imagen dentro
+ * del video sube un poco más lento que su marco.
  */
-const VIDEO_FADE_START_PROGRESS = 0.28;
-const VIDEO_FADE_END_PROGRESS = 0.38;
+const ESTAR_RISE = span(100, 200);
+/** Cuánto sube el manifiesto mientras lo tapa el video (vh) y cuánto se oscurece. */
+const MANIFESTO_PARALLAX_VH = 28;
+const MANIFESTO_DIM_MAX = 0.6;
+/** Desfase de la imagen dentro del video al entrar (vh): se acomoda al llegar arriba. */
+const ESTAR_INNER_PARALLAX_VH = 12;
 
-/** Título, subtítulo, definición 1 y pentagrama se desvanecen (con un leve blur) uno tras otro. */
-const TEXT_FADE_OUT_START = 0.3;
-const TEXT_FADE_OUT_STAGGER = 0.02;
-const TEXT_FADE_OUT_LENGTH = 0.08;
-
-/** El pentagrama aparece después de las definiciones (s desde que arranca la escena). */
-const CLAVE_STAFF_DELAY = 2.3;
-
-/** En la definición 2 se apaga todo menos «estar acá», que se ilumina. */
-const DEFINITION_2_HIGHLIGHT = "estar acá";
-const DEF2_REST_FADE: [number, number] = [0.4, 0.5];
-
-/** «estar acá» viaja al título mientras entra el video «estar acá». */
-const HIGHLIGHT_TO_TITLE: [number, number] = [0.54, 0.68];
-const SECOND_VIDEO_FADE_START = 0.54;
-const SECOND_VIDEO_FADE_END = 0.7;
-/** «y estar ahora» completa el título cuando la palabra ya llegó. */
-const ESTAR_TITLE_REST_FADE: [number, number] = [0.64, 0.74];
-const ESTAR_PLAY_BUTTON_FADE: [number, number] = [0.72, 0.8];
+/** Con el video ya arriba: título y botón de play. */
+const ESTAR_TITLE_FADE = span(184, 204);
+const ESTAR_PLAY_BUTTON_FADE = span(196, 214);
 
 const ESTAR_TITLE_CLASS = "text-[clamp(2rem,6vw+1.25rem,100px)] leading-[0.95] tracking-tight";
 
-/**
- * Escenas en reposo (progreso 0–1) donde se detiene el scroll por escenas: texto + tambor.
- * La transición a «estar acá» queda en scroll libre, al ritmo de quien scrollea.
- */
-export const MANIFESTO_SCENE_STOPS = [0.2] as const;
-
 /** Oscurecido detrás del título/botón: acompaña su entrada. */
-const MANIFESTO_PLAY_OVERLAY_START = 0.62;
-const MANIFESTO_PLAY_OVERLAY_END = 0.74;
+const MANIFESTO_PLAY_OVERLAY_START = at(186);
+const MANIFESTO_PLAY_OVERLAY_END = at(208);
 
 /** Por debajo de esto se resetea el overlay / audio del «estar acá». */
-const MANIFESTO_PLAY_RESET_PROGRESS = 0.40;
-
-const MANIFESTO_SCROLL_HEIGHT_VH = 300;
+const MANIFESTO_PLAY_RESET_PROGRESS = ESTAR_RISE[0];
 
 /** Anticipar reproducción ~1s antes del fade-in (mapeado scroll ≈ px/s sobre el tramo del manifiesto). */
 const ESTAR_VIDEO_PLAY_PREROLL_MS = 1000;
 const ESTAR_VIDEO_ASSUMED_SCROLL_PX_PER_SEC = 480;
-/** Tope de adelanto en progreso 0–1 para no solaparse con el tambor. */
-const ESTAR_VIDEO_PLAY_LEAD_PROGRESS_CAP = 0.055;
+/** Tope de adelanto en progreso 0–1 (arranca un poco antes de asomar). */
+const ESTAR_VIDEO_PLAY_LEAD_PROGRESS_CAP = at(11);
 
 const SECOND_VIDEO_SRC = "/video/estar-aca-corto.mov";
+
+/** Opacidad + blur atados al scroll: el elemento aparece a lo largo de `fadeIn`. */
+function useScrollFadeIn(progress: MotionValue<number>, fadeIn: [number, number]) {
+  return {
+    opacity: useTransform(progress, fadeIn, [0, 1], { clamp: true }),
+    filter: useTransform(progress, fadeIn, ["blur(8px)", "blur(0px)"], { clamp: true }),
+  };
+}
 
 export function ManifestoSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -108,8 +109,6 @@ export function ManifestoSection() {
   const [blockPhase, setBlockPhase] = useState<0 | 1>(0);
   const [showDefinition2, setShowDefinition2] = useState(false);
   const estarVideoRef = useRef<HTMLVideoElement>(null);
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const estarTitleWordRef = useRef<HTMLSpanElement>(null);
   const estarVideoStartedRef = useRef(false);
   const playOverlayDismissed = useMotionValue(0);
   const [youtubeOpen, setYoutubeOpen] = useState(false);
@@ -146,77 +145,34 @@ export function ManifestoSection() {
     { clamp: true },
   );
 
-  const tamborVideoOpacity = useTransform(
-    scrollYProgress,
-    [
-      0,
-      TEXT_TRIGGER_PROGRESS,
-      VIDEO_FADE_START_PROGRESS,
-      VIDEO_FADE_END_PROGRESS,
-    ],
-    [0, 1, 1, 0],
-    { clamp: true },
-  );
+  const tamborVideoOpacity = useTransform(scrollYProgress, [0, TEXT_TRIGGER_PROGRESS], [0, 1], {
+    clamp: true,
+  });
 
-  const estarVideoOpacity = useTransform(
+  // Subida del video «estar acá»: lineal, 1:1 con el scroll.
+  const estarRiseY = useTransform(scrollYProgress, ESTAR_RISE, ["100vh", "0vh"], { clamp: true });
+  const estarInnerY = useTransform(
     scrollYProgress,
-    [SECOND_VIDEO_FADE_START, SECOND_VIDEO_FADE_END],
-    [0, 1],
+    ESTAR_RISE,
+    ["0vh", `${ESTAR_INNER_PARALLAX_VH}vh`],
     { clamp: true },
   );
+  const manifestoContentY = useTransform(
+    scrollYProgress,
+    ESTAR_RISE,
+    ["0vh", `-${MANIFESTO_PARALLAX_VH}vh`],
+    { clamp: true },
+  );
+  const manifestoDim = useTransform(scrollYProgress, ESTAR_RISE, [0, MANIFESTO_DIM_MAX], {
+    clamp: true,
+  });
 
-  /** Fundido de salida de la línea `index` del texto (0 = título). */
-  const textFadeRange = (index: number): [number, number] => {
-    const start = TEXT_FADE_OUT_START + index * TEXT_FADE_OUT_STAGGER;
-    return [start, start + TEXT_FADE_OUT_LENGTH];
-  };
-  const titleOpacity = useTransform(scrollYProgress, textFadeRange(0), [1, 0], { clamp: true });
-  const titleBlur = useTransform(scrollYProgress, textFadeRange(0), ["blur(0px)", "blur(8px)"], {
-    clamp: true,
-  });
-  const subtitleOpacity = useTransform(scrollYProgress, textFadeRange(1), [1, 0], {
-    clamp: true,
-  });
-  const subtitleBlur = useTransform(
-    scrollYProgress,
-    textFadeRange(1),
-    ["blur(0px)", "blur(8px)"],
-    { clamp: true },
-  );
-  const def1Opacity = useTransform(scrollYProgress, textFadeRange(2), [1, 0], { clamp: true });
-  const def1Blur = useTransform(scrollYProgress, textFadeRange(2), ["blur(0px)", "blur(8px)"], {
-    clamp: true,
-  });
-  const staffOpacity = useTransform(scrollYProgress, textFadeRange(3), [1, 0], { clamp: true });
-  const staffBlur = useTransform(scrollYProgress, textFadeRange(3), ["blur(0px)", "blur(8px)"], {
-    clamp: true,
-  });
-  const def2RestOpacity = useTransform(scrollYProgress, DEF2_REST_FADE, [1, 0], {
-    clamp: true,
-  });
-  const highlightGlow = useTransform(scrollYProgress, DEF2_REST_FADE, [0, 1], { clamp: true });
-  // Al empezar el viaje, la copia de ManifestoWordMorph toma el lugar de la palabra.
-  const highlightStyle = {
-    opacity: useTransform(scrollYProgress, (p) => (p < HIGHLIGHT_TO_TITLE[0] ? 1 : 0)),
-    textShadow: useTransform(
-      highlightGlow,
-      (g) => `0 0 ${18 * g}px rgba(255,255,255,${0.5 * g})`,
-    ),
-  };
-
-  // «Estar acá» del título aparece cuando la copia llega; el resto entra con un fade.
-  const estarTitleWordOpacity = useTransform(scrollYProgress, (p) =>
-    p >= HIGHLIGHT_TO_TITLE[1] ? 1 : 0,
-  );
-  const estarTitleRestOpacity = useTransform(scrollYProgress, ESTAR_TITLE_REST_FADE, [0, 1], {
-    clamp: true,
-  });
-  const estarTitleRestBlur = useTransform(
-    scrollYProgress,
-    ESTAR_TITLE_REST_FADE,
-    ["blur(12px)", "blur(0px)"],
-    { clamp: true },
-  );
+  const titleStyle = useScrollFadeIn(scrollYProgress, TITLE_FADE_IN);
+  const subtitleStyle = useScrollFadeIn(scrollYProgress, SUBTITLE_FADE_IN);
+  const def1Style = useScrollFadeIn(scrollYProgress, DEF1_FADE_IN);
+  const def2Style = useScrollFadeIn(scrollYProgress, DEF2_FADE_IN);
+  const staffStyle = useScrollFadeIn(scrollYProgress, STAFF_FADE_IN);
+  const estarTitleStyle = useScrollFadeIn(scrollYProgress, ESTAR_TITLE_FADE);
   const estarPlayButtonOpacity = useTransform(scrollYProgress, ESTAR_PLAY_BUTTON_FADE, [0, 1], {
     clamp: true,
   });
@@ -264,10 +220,7 @@ export function ManifestoSection() {
         ESTAR_VIDEO_ASSUMED_SCROLL_PX_PER_SEC /
         rangePx,
     );
-    const estarPlayProgress = Math.max(
-      VIDEO_FADE_START_PROGRESS + 0.04,
-      SECOND_VIDEO_FADE_START - leadProgress,
-    );
+    const estarPlayProgress = Math.max(TEXT_TRIGGER_PROGRESS, ESTAR_RISE[0] - leadProgress);
     const estarHysteresis = Math.max(0.01, leadProgress * 0.35);
 
     if (progress < estarPlayProgress - estarHysteresis) {
@@ -329,27 +282,6 @@ export function ManifestoSection() {
     wrapperClass: `mb-0 ${subtitleAlignWithListBodyClass}`,
   };
 
-  const scene1Active = blockPhase === 1;
-
-  const textContainerRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    if (scene1Active) {
-      gsap.fromTo(
-        ".manifesto-title-text",
-        { opacity: 0 },
-        { opacity: 1, duration: 1.1, ease: "power2.out", delay: 0.2 }
-      );
-      gsap.fromTo(
-        ".manifesto-subtitle-text",
-        { opacity: 0 },
-        { opacity: 1, duration: 1.1, ease: "power2.out", delay: 0.45 }
-      );
-    } else {
-      gsap.set(".manifesto-title-text, .manifesto-subtitle-text", { opacity: 0 });
-    }
-  }, { dependencies: [scene1Active], scope: textContainerRef });
-
   return (
     <section
       ref={sectionRef}
@@ -359,14 +291,13 @@ export function ManifestoSection() {
     >
       <div className="sticky top-0 flex h-screen w-full items-start overflow-hidden">
         <motion.div
-          ref={sceneRef}
           className="absolute inset-0 flex items-start pt-[10vh] md:pt-[12vh]"
           style={{ opacity: sceneOpacity }}
         >
           <div className="pointer-events-none absolute inset-0">
             <motion.div
               className="absolute right-0 top-0 h-full w-[58%] overflow-hidden bg-[#0A0A0A] will-change-transform md:w-[60%]"
-              style={{ opacity: tamborVideoOpacity }}
+              style={{ opacity: tamborVideoOpacity, y: manifestoContentY }}
             >
               <video
                 autoPlay
@@ -381,47 +312,65 @@ export function ManifestoSection() {
               <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#0A0A0A] via-transparent to-transparent" />
             </motion.div>
 
-            <motion.div
-              className="absolute inset-x-0 top-0 z-[11] h-full w-full overflow-hidden flex items-center justify-center"
-              style={{ opacity: estarVideoOpacity }}
-            >
-              <div className="relative h-full w-full overflow-hidden">
-                <video
-                  ref={estarVideoRef}
-                  className="pointer-events-none block h-full w-full object-cover object-center"
-                  src={SECOND_VIDEO_SRC}
-                  muted
-                  playsInline
-                  loop
-                  preload="metadata"
-                />
-                <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-[#0A0A0A] via-transparent to-transparent" />
+            {/* Video «estar acá»: sube desde abajo con el scroll, por encima del manifiesto. */}
+            <motion.div className="absolute inset-0 z-[22]" style={{ y: estarRiseY }}>
+              {/* Sombra suave que el borde del video proyecta sobre lo que tapa */}
+              <div className="absolute inset-x-0 bottom-full h-[18vh] bg-gradient-to-b from-transparent to-black/55" />
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div
+                  className="absolute inset-x-0"
+                  style={{
+                    top: `-${ESTAR_INNER_PARALLAX_VH}vh`,
+                    height: `calc(100% + ${ESTAR_INNER_PARALLAX_VH}vh)`,
+                    y: estarInnerY,
+                  }}
+                >
+                  <video
+                    ref={estarVideoRef}
+                    className="pointer-events-none block h-full w-full object-cover object-center"
+                    src={SECOND_VIDEO_SRC}
+                    muted
+                    playsInline
+                    loop
+                    preload="metadata"
+                  />
+                  <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-[#0A0A0A] via-transparent to-transparent" />
+                </motion.div>
               </div>
             </motion.div>
           </div>
 
+          {/* El manifiesto se oscurece de a poco mientras el video lo tapa */}
           <motion.div
-            className="pointer-events-none absolute inset-0 z-[21] bg-black"
+            className="pointer-events-none absolute inset-0 z-[21] bg-[#0A0A0A]"
+            style={{ opacity: manifestoDim }}
+            aria-hidden
+          />
+
+          <motion.div
+            className="pointer-events-none absolute inset-0 z-[23] bg-black"
             style={{ opacity: playBackdropOpacity }}
             aria-hidden
           />
 
-          <div className="relative z-20 mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-14">
+          <motion.div
+            className="relative z-20 mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-14"
+            style={{ y: manifestoContentY }}
+          >
             <div
-              ref={textContainerRef}
               className="relative flex min-h-[200px] w-full flex-col justify-start text-left md:max-w-[min(40vw,34rem)] lg:max-w-[min(40vw,36rem)]"
             >
               <div className="flex flex-col items-start justify-start">
-                <motion.div style={{ opacity: titleOpacity, filter: titleBlur }} className={`w-full overflow-hidden ${block1Title.wrapperClass ?? ""}`}>
+                <motion.div style={titleStyle} className={`w-full overflow-hidden ${block1Title.wrapperClass ?? ""}`}>
                   <div className={`manifesto-title-text ${block1Title.className}`}>{block1Title.text}</div>
                 </motion.div>
-                <motion.div style={{ opacity: subtitleOpacity, filter: subtitleBlur }} className={`w-full overflow-hidden ${block1Subtitle.wrapperClass ?? ""}`}>
+                <motion.div style={subtitleStyle} className={`w-full overflow-hidden ${block1Subtitle.wrapperClass ?? ""}`}>
                   <div className={`manifesto-subtitle-text ${block1Subtitle.className}`}>{block1Subtitle.text}</div>
                 </motion.div>
               </div>
 
               <div className="mt-10 flex w-full max-w-[min(100%,22rem)] flex-col gap-y-6 md:mt-12 md:max-w-[min(100%,32rem)] md:gap-y-8">
-                <motion.div style={{ opacity: def1Opacity, filter: def1Blur }} className="w-full">
+                <motion.div style={def1Style} className="w-full">
                   <ManifestoDefinitionListItem
                     key="def-1"
                     num="1."
@@ -431,9 +380,10 @@ export function ManifestoSection() {
                     numClassName={numberedListNumClass}
                     bodyClassName={numberedListBodyClass}
                     baseDelay={1.2}
+                    revealOnMount={false}
                   />
                 </motion.div>
-                <div className="w-full">
+                <motion.div style={def2Style} className="w-full">
                   <ManifestoDefinitionListItem
                     key="def-2"
                     num="2."
@@ -443,43 +393,24 @@ export function ManifestoSection() {
                     numClassName={numberedListNumClass}
                     bodyClassName={numberedListBodyClass}
                     baseDelay={1.6}
-                    highlight={DEFINITION_2_HIGHLIGHT}
-                    restStyle={{ opacity: def2RestOpacity }}
-                    highlightStyle={highlightStyle}
+                    revealOnMount={false}
                   />
-                </div>
-                <motion.div
-                  className="w-full pl-16 md:pl-[5.5rem]"
-                  style={{ opacity: staffOpacity, filter: staffBlur }}
-                >
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: blockPhase === 1 ? 1 : 0 }}
-                    transition={{
-                      duration: 1.1,
-                      ease: "easeOut",
-                      delay: blockPhase === 1 ? CLAVE_STAFF_DELAY : 0,
-                    }}
-                  >
-                    <ClaveStaff playing={blockPhase === 1} className="block h-auto w-full text-white" />
-                  </motion.div>
+                </motion.div>
+                <motion.div className="w-full pl-16 md:pl-[5.5rem]" style={staffStyle}>
+                  <ClaveStaff playing={blockPhase === 1} className="block h-auto w-full text-white" />
                 </motion.div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           <div className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center px-4">
             <div className="flex max-w-[min(100%,56rem)] flex-col items-center text-center">
-              <h2
+              <motion.h2
                 className={`${ebGaramondMediumItalic.className} ${ESTAR_TITLE_CLASS} text-white drop-shadow-md`}
+                style={estarTitleStyle}
               >
-                <motion.span ref={estarTitleWordRef} style={{ opacity: estarTitleWordOpacity }}>
-                  Estar acá
-                </motion.span>
-                <motion.span style={{ opacity: estarTitleRestOpacity, filter: estarTitleRestBlur }}>
-                  {" "}y estar ahora
-                </motion.span>
-              </h2>
+                Estar acá y estar ahora
+              </motion.h2>
               <motion.button
                 style={{ opacity: estarPlayButtonOpacity }}
                 type="button"
@@ -491,18 +422,6 @@ export function ManifestoSection() {
               </motion.button>
             </div>
           </div>
-
-          <ManifestoWordMorph
-            progress={scrollYProgress}
-            range={HIGHLIGHT_TO_TITLE}
-            sceneRef={sceneRef}
-            sourceSelector="[data-manifesto-highlight]"
-            targetRef={estarTitleWordRef}
-            sourceText={DEFINITION_2_HIGHLIGHT}
-            sourceClassName={`font-sans font-bold leading-[1.5] text-white ${manifestoParagraphSizeClass}`}
-            targetText="Estar acá"
-            targetClassName={`${ebGaramondMediumItalic.className} ${ESTAR_TITLE_CLASS} text-white drop-shadow-md`}
-          />
 
           <EstarAcaYoutubeEmbed open={youtubeOpen} onClose={handleYoutubeClose} />
         </motion.div>

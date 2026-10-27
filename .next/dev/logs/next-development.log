@@ -1,288 +1,31 @@
-[00:00:02.776] Server  LOG     ✓ Ready in 2s
-[00:00:04.975] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:05.415] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:00:10.652] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:12.551] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:00:15.393] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:16.266] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:02:14.680] Server  LOG     ✓ Compiled in 6.9s
-[00:02:14.876] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:02:14.899] Browser ERROR   unhandledRejection: undefined
-[00:02:14.910] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:02:20.278] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:20.854] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:24.614] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:02:24.912] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:03:31.582] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:03:31.586] Server  LOG     ✓ Compiled in 281ms
-[00:03:31.594] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:03:34.101] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:35.033] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:37.234] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:03:37.317] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:03:39.378] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:40.012] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:05:03.933] Server  LOG     ✓ Compiled in 921ms
-[00:05:03.950] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:05:03.983] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:05:07.111] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:05:08.039] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:05:10.635] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:05:11.479] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:05:12.701] Server  LOG     ✓ Compiled in 879ms
-[00:05:14.285] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:05:14.287] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:05:17.731] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:05:18.086] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:05:24.065] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:05:24.765] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:07:51.892] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:07:53.605] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:08:15.614] Server  LOG     ✓ Compiled in 196ms
-[00:08:46.497] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:08:48.585] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:10:08.539] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:10:09.099] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:12:45.867] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:12:45.868] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:12:45.869] Server  LOG     ✓ Compiled in 163ms
-[00:12:48.244] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:12:48.416] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:12:51.636] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:13:26.386] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:13:26.396] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:13:26.463] Server  LOG     ✓ Compiled in 78ms
-[00:13:27.562] Browser ERROR   ./components/sections/manifesto/ManifestoSection.tsx:431:30
-Parsing ecmascript source code failed
-  429 |                     baseDelay={1.6}
-  430 |                   />
-> 431 |                 </motion.div>
-      |                              ^
-> 432 |               </div>
-      | ^^^^^^^^^^^^^^^
-  433 |             </div>
-  434 |           </div>
-  435 |
-
-Expected '</', got 'jsx text'
-
-Import trace:
-  Server Component:
-    ./components/sections/manifesto/ManifestoSection.tsx
-    ./components/sections/home/HomePageSections.tsx
-    ./app/page.tsx
-[00:13:27.562] Browser ERROR   ./components/sections/manifesto/ManifestoSection.tsx:431:30
-Parsing ecmascript source code failed
-  429 |                     baseDelay={1.6}
-  430 |                   />
-> 431 |                 </motion.div>
-      |                              ^
-> 432 |               </div>
-      | ^^^^^^^^^^^^^^^
-  433 |             </div>
-  434 |           </div>
-  435 |
-
-Expected '</', got 'jsx text'
-
-Import trace:
-  Server Component:
-    ./components/sections/manifesto/ManifestoSection.tsx
-    ./components/sections/home/HomePageSections.tsx
-    ./app/page.tsx
-[00:13:28.465] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:29.344] Browser ERROR   ./components/sections/manifesto/ManifestoSection.tsx:431:30
-Parsing ecmascript source code failed
-  429 |                     baseDelay={1.6}
-  430 |                   />
-> 431 |                 </motion.div>
-      |                              ^
-> 432 |               </div>
-      | ^^^^^^^^^^^^^^^
-  433 |             </div>
-  434 |           </div>
-  435 |
-
-Expected '</', got 'jsx text'
-
-Import trace:
-  Server Component:
-    ./components/sections/manifesto/ManifestoSection.tsx
-    ./components/sections/home/HomePageSections.tsx
-    ./app/page.tsx
-[00:13:29.344] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:29.654] Browser ERROR   ./components/sections/manifesto/ManifestoSection.tsx:431:30
-Parsing ecmascript source code failed
-  429 |                     baseDelay={1.6}
-  430 |                   />
-> 431 |                 </motion.div>
-      |                              ^
-> 432 |               </div>
-      | ^^^^^^^^^^^^^^^
-  433 |             </div>
-  434 |           </div>
-  435 |
-
-Expected '</', got 'jsx text'
-
-Import trace:
-  Server Component:
-    ./components/sections/manifesto/ManifestoSection.tsx
-    ./components/sections/home/HomePageSections.tsx
-    ./app/page.tsx
-[00:13:30.885] Browser ERROR   uncaughtError: Error: Could not parse module '[project]/components/sections/manifesto/ManifestoSection.tsx'
-
-Expected '</', got 'jsx text'
-[00:13:30.955] Browser ERROR   uncaughtError: Error: Could not parse module '[project]/components/sections/manifesto/ManifestoSection.tsx'
-
-Expected '</', got 'jsx text'
-[00:13:31.161] Server  LOG     ✓ Compiled in 53ms
-[00:13:31.276] Browser ERROR   ./components/sections/manifesto/ManifestoSection.tsx:431:30
-Parsing ecmascript source code failed
-  429 |                     baseDelay={1.6}
-  430 |                   />
-> 431 |                 </motion.div>
-      |                              ^
-> 432 |               </div>
-      | ^^^^^^^^^^^^^^^
-  433 |             </div>
-  434 |           </div>
-  435 |
-
-Expected '</', got 'jsx text'
-
-Import trace:
-  Server Component:
-    ./components/sections/manifesto/ManifestoSection.tsx
-    ./components/sections/home/HomePageSections.tsx
-    ./app/page.tsx
-[00:13:31.277] Browser ERROR   ./components/sections/manifesto/ManifestoSection.tsx:431:30
-Parsing ecmascript source code failed
-  429 |                     baseDelay={1.6}
-  430 |                   />
-> 431 |                 </motion.div>
-      |                              ^
-> 432 |               </div>
-      | ^^^^^^^^^^^^^^^
-  433 |             </div>
-  434 |           </div>
-  435 |
-
-Expected '</', got 'jsx text'
-
-Import trace:
-  Server Component:
-    ./components/sections/manifesto/ManifestoSection.tsx
-    ./components/sections/home/HomePageSections.tsx
-    ./app/page.tsx
-[00:13:31.878] Browser ERROR   ./components/sections/manifesto/ManifestoSection.tsx:431:30
-Parsing ecmascript source code failed
-  429 |                     baseDelay={1.6}
-  430 |                   />
-> 431 |                 </motion.div>
-      |                              ^
-> 432 |               </div>
-      | ^^^^^^^^^^^^^^^
-  433 |             </div>
-  434 |           </div>
-  435 |
-
-Expected '</', got 'jsx text'
-
-Import trace:
-  Server Component:
-    ./components/sections/manifesto/ManifestoSection.tsx
-    ./components/sections/home/HomePageSections.tsx
-    ./app/page.tsx
-[00:13:31.878] Browser ERROR   ./components/sections/manifesto/ManifestoSection.tsx:431:30
-Parsing ecmascript source code failed
-  429 |                     baseDelay={1.6}
-  430 |                   />
-> 431 |                 </motion.div>
-      |                              ^
-> 432 |               </div>
-      | ^^^^^^^^^^^^^^^
-  433 |             </div>
-  434 |           </div>
-  435 |
-
-Expected '</', got 'jsx text'
-
-Import trace:
-  Server Component:
-    ./components/sections/manifesto/ManifestoSection.tsx
-    ./components/sections/home/HomePageSections.tsx
-    ./app/page.tsx
-[00:13:39.457] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:13:39.457] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:13:39.458] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:13:39.462] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:13:39.463] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:13:39.463] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:13:40.584] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:40.664] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:42.368] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:14:07.053] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:14:07.068] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:14:07.078] Server  LOG     ✓ Compiled in 68ms
-[00:14:09.411] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:14:09.521] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:14:11.792] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:14:36.713] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:14:38.779] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:14:39.490] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:14:56.517] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:14:57.526] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:15:57.148] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:15:58.168] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:17:33.029] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:17:33.355] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:17:42.467] Server  LOG     ✓ Compiled in 555ms
-[00:17:42.480] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:17:42.492] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:17:45.782] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:17:45.784] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:17:47.284] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:18:38.655] Server  LOG     ✓ Compiled in 778ms
-[00:19:05.679] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:19:05.697] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:19:05.727] Server  LOG     ✓ Compiled in 131ms
-[00:19:08.013] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:19:09.067] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:19:11.041] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:19:44.039] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:19:46.014] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:19:46.831] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:21:43.579] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:21:43.581] Server  LOG     ✓ Compiled in 224ms
-[00:21:43.622] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:21:47.275] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:21:47.956] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:21:51.826] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:21:52.427] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:22:08.438] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:22:09.730] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:26:36.920] Server  LOG     ✓ Compiled in 241ms
-[00:26:36.925] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:26:36.926] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:26:40.853] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:26:41.893] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:26:43.987] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:26:44.660] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:28:00.003] Server  LOG     ✓ Compiled in 147ms
-[00:28:00.007] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:28:00.042] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:28:03.906] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:28:03.907] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:28:06.688] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:28:07.089] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:28:38.706] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:28:39.322] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:30:32.355] Server  LOG     ✓ Compiled in 599ms
-[00:30:32.518] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:30:32.543] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoSection.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:30:36.261] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:30:36.590] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:30:39.854] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:30:40.320] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:31:11.817] Server  LOG     ✓ Compiled in 365ms
+[00:00:07.292] Server  LOG     ✓ Ready in 6s
+[00:00:10.317] Server  LOG     ○ Compiling / ...
+[00:00:17.579] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:18.448] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:00:29.937] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:30.454] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:05:28.931] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:05:29.156] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./components/sections/manifesto/ManifestoDefinitionListItem.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:05:31.819] Server  LOG     ✓ Compiled in 60ms
+[00:05:37.129] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:39.174] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:05:40.095] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:40.671] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:42.009] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:05:45.741] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:47.135] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:11:51.472] Server  LOG     ✓ Compiled in 355ms
+[00:11:51.802] Browser ERROR   uncaughtError: ReferenceError: sceneRef is not defined
+[00:11:52.194] Browser ERROR   uncaughtError: ReferenceError: sceneRef is not defined
+[00:13:24.751] Server  LOG     ✓ Compiled in 6.5s
+[00:13:25.320] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:13:25.467] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:13:46.904] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:57.519] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:14:04.977] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:14:10.579] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:15:11.205] Server  LOG     ✓ Compiled in 113ms
+[00:15:31.599] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:34.428] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[07:15:02.154] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:15:03.310] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.

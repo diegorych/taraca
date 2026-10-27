@@ -127,7 +127,7 @@ export function ClaveStaff({ playing, className }: Props) {
           y1={y}
           x2={760}
           y2={y}
-          strokeWidth={i === 0 || i === STAFF_LINES_Y.length - 1 ? 3 : 1.5}
+          strokeWidth={i === 0 || i === STAFF_LINES_Y.length - 1 ? 3 : 2.4}
         />
       ))}
       <line x1={1.5} y1={20} x2={1.5} y2={96} strokeWidth={3} />

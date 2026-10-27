@@ -56,6 +56,8 @@ type Props = {
   bodyClassName: string;
   /** Retraso de la primera línea (y del número) */
   baseDelay?: number;
+  /** false: sin fade de entrada propio (la entrada la maneja quien lo contiene). */
+  revealOnMount?: boolean;
   /** Frase del texto que se anima aparte del resto (puede quedar partida entre líneas). */
   highlight?: string;
   /** Estilo del número y del texto que no es `highlight`. */
@@ -95,6 +97,7 @@ export function ManifestoDefinitionListItem({
   numClassName,
   bodyClassName,
   baseDelay = 0,
+  revealOnMount = true,
   highlight,
   restStyle,
   highlightStyle,
@@ -118,7 +121,7 @@ export function ManifestoDefinitionListItem({
   }, [active, lines]);
 
   useGSAP(() => {
-    if (!active || !frozenLines || frozenLines.length === 0) return;
+    if (!revealOnMount || !active || !frozenLines || frozenLines.length === 0) return;
     
     // Número y líneas aparecen juntos con un fade (sin desplazamiento)
     gsap.fromTo(
@@ -131,7 +134,7 @@ export function ManifestoDefinitionListItem({
         delay: baseDelay,
       }
     );
-  }, { dependencies: [active, frozenLines], scope: containerRef });
+  }, { dependencies: [active, frozenLines, revealOnMount], scope: containerRef });
 
   if (!active) return null;
 
